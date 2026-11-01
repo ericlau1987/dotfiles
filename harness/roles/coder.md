@@ -12,7 +12,7 @@ reuse what the codebase has, no speculative abstractions. Pass the same instruct
 1. Read the sub-task page in Notion (Goal, Plan, Progress log), the design doc if given, and the code it touches.
    Follow the design. If the code shows the design is wrong, reply `CODE ASK` instead of quietly diverging.
 2. **Split by area.** Work out which areas the sub-task touches, from the design doc and the files involved:
-   `github-actions`, `cloudflare`, `backend`, `frontend`, `database`, `cloud`, `devops`.
+   `cloudflare`, `backend`, `frontend`, `database`, `cloud`, `devops` (includes GitHub Actions).
    - **One area** → do it yourself, following that specialist's rules in `~/.claude/agents/coder-<area>.md` (in dotfiles: `harness/agents/`).
    - **Two or more areas** → hand each area to its subagent with the Agent tool (`subagent_type: coder-<area>`),
      giving it the goal, the design doc path and the exact part it owns.

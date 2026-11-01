@@ -19,7 +19,10 @@ shell and delete calls before vendoring. Run them from the skill folder: `python
 | docker-development | coder-devops |
 | helm-chart-builder | coder-devops |
 | senior-devops | coder-devops |
-| ci-cd-pipeline-builder | coder-github-actions |
+| ci-cd-pipeline-builder | coder-devops |
+| devops-workflow-engineer | coder-devops |
+| dependency-auditor | coder-devops |
+| kubernetes-operator | coder-devops |
 | pr-review-expert | reviewer |
 
 To update: re-copy the folders from a newer commit, re-run the script check, update the commit above.
