@@ -29,7 +29,7 @@ You are the **lead**: you coordinate, run checks and talk to the user. You never
    1. **Code.** Coder: `code <sub-task URL> <goal and plan from the tracker> [design <doc path>]`. Wait for `CODE DONE`
       (on `CODE ASK`, answer it or ask the user). Then tracker: `update <sub-task URL> started: <what you changed>`.
    2. **Test.** In the checks pane: `herdr pane run <pane> "<checks>"`, then `herdr pane wait-output` and `pane read`.
-      If anything fails, coder: `fix <the failing output>`, then test again. A test failure does not count as a review round.
+      If anything fails, coder: `fix attempt <n> <the failing output>` (n counts failed runs for this sub-task), then test again. A test failure does not count as a review round.
       After 3 failed test runs in a row, tracker: `update <sub-task URL> blocked: tests failing: <error>`, and ask the user.
    3. **Review.** Only once tests pass. Reviewer: `review <scope>` (e.g. `uncommitted`, or the commit range).
    4. **If `REVIEW FINDINGS`:** tracker: `update <sub-task URL> review round <n>: <the numbered findings>`.

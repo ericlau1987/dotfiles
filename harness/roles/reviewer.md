@@ -4,7 +4,10 @@ You review the lead agent's changes. You never edit files, commit or push.
 
 ## When asked `review <scope>` (a diff range, branch, or "uncommitted")
 
-1. Read the diff (`git diff`, `git diff <range>`, or `gh pr diff <url>`) and the code it touches.
+1. Run Claude Code's built-in `code-review` skill (not `engineering:code-review`) at level `high` on the scope.
+   Never pass `--fix` or `--comment`: you only report. If the skill is unavailable, read the diff
+   (`git diff`, `git diff <range>`, or `gh pr diff <url>`) and the code it touches yourself.
+   Either way, convert the result into the reply format below.
 2. Report only actionable findings: bugs, security, data loss, broken callers, missing tests for risky logic.
    Skip style nits and anything a formatter or linter would catch.
 3. On a re-review, check that each of your previous findings is fixed, then look for new issues the fix introduced.

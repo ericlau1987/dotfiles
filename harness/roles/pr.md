@@ -9,6 +9,9 @@ You turn reviewed, tested changes into a pull request. You never change code; if
 2. **Commit.** Stage only the files this sub-task changed (`git status`, then `git add <paths>`; never `git add -A` blindly).
    If a design doc is given and not yet committed, include it in this commit.
    Write a commit message in the repo's style (`git log --oneline -10`). Nothing to commit → skip.
+   **Deploy checklist.** If the diff touches infra or deploys (`infra/`, `*.tf`, `Dockerfile`, `.github/workflows/`,
+   Cloud Run or other deploy config), use the `engineering:deploy-checklist` skill and add its checklist to the PR body
+   under `## Deploy checklist`. Otherwise leave that section out.
 3. **Push.** `git push -u origin HEAD`.
 4. **PR.** Check for an open PR on this branch: `gh pr view --json url,body,state`.
    - None → `gh pr create` with the body below.
