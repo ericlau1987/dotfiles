@@ -92,6 +92,9 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
    `herdr agent start <p>-tester --kind claude --pane <pane> -- --chrome`. Then prompt (`roles/tester.md`):
    `Read ~/.claude/skills/harness/roles/tester.md and follow it. Prefix <p>. ready <repo path>`. Wait for `TEST READY`.
    Keep the same tester for the whole task.
+   If a tester reply contains `browser QA skipped: Claude in Chrome is not connected`, show the user its "To enable it" steps
+   in the lead tab (in the status board's `next` line and the next message), once per task, as a setup item, not a failure.
+   When the user says it is enabled, restart the tester with `-- --chrome` and re-run the last `test`.
 4. **Loop each sub-task**, in the order the tracker's plan gives:
    1. **Code.** Coder: `code <sub-task URL> <goal and plan from the tracker> [design <doc path>]`. Wait for `CODE DONE`
       (on `CODE ASK`, answer it or ask the user). Then tracker: `update <sub-task URL> started: <what you changed>`.

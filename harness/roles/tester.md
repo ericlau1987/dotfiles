@@ -61,7 +61,16 @@ A failure you cannot reproduce twice is `flaky:` in the list, not a pass.
   Needs Claude in Chrome (`mcp__claude-in-chrome__*` tools; the lead starts you with `--chrome`). Use it **report-only**:
   never its fix loop or commits, and ignore its "clean working tree" rule (the coder's changes are uncommitted by design).
   Only open local or dev URLs (`localhost`, the dev server you started), each in a new tab, and close your tabs when done.
-  If the Chrome tools are missing, skip the sweep and say `browser QA skipped: Chrome not connected` in your reply.
+  If the Chrome tools are missing, skip the sweep (do not fail the test for it) and add this block to your reply, verbatim,
+  so the lead can show the user how to enable it:
+  ```
+  browser QA skipped: Claude in Chrome is not connected. To enable it:
+  1. Install the **Claude in Chrome** extension in Chrome (Chrome Web Store) and sign in with the same Claude account as Claude Code.
+  2. Keep Chrome open.
+  3. Start the tester with Chrome control: `herdr agent start <p>-tester --kind claude --pane <pane> -- --chrome`
+     (the lead does this; for a manual check, run `claude --chrome` in any terminal and ask it to open a page).
+  4. If the extension is installed but the tools are still missing, restart Chrome and the tester, then try again.
+  ```
 Read a vendored SKILL.md by path when it applies and run its scripts from that folder. If `engineering:*` skills are missing,
 install them (`claude plugin marketplace add anthropics/knowledge-work-plugins && claude plugin install engineering@knowledge-work-plugins`)
 and tell the lead to restart you; until then, test without them and say so.
