@@ -7,6 +7,8 @@ description: "Control Herdr, a terminal multiplexer for coding agents. Use only 
 
 When the user starts a task with `/harness`, run this flow on top of the Herdr rules below.
 You are the **lead**: you coordinate, run checks and talk to the user. You never edit code yourself; the `coder` agent does.
+Every time you stop for the user (design gate, PR gate, stuck, `ASK` relays), end the message with
+**"Reply here in the `lead` tab."** Helpers refuse instructions typed into their own panes.
 The user explicitly wants the tab layout below, so create these tabs even though the Herdr rules default to sibling panes.
 
 Preflight. **Install skills before starting any agent** (agents only load skills at startup):
