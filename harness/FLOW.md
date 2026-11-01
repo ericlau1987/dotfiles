@@ -6,7 +6,7 @@ Live page: https://claude.ai/artifact/CLW9mE2AZSM3ZagBQh2ojj
 
 ## Who talks to whom
 
-Helpers never talk to each other. Every message goes through the lead (`herdr agent prompt` / `herdr agent read`).
+Helpers never talk to each other, except the coder and the area specialists it starts. Every other message goes through the lead (`herdr agent prompt` / `herdr agent read`).
 
 ```mermaid
 flowchart TB
@@ -28,7 +28,7 @@ One herdr workspace per repo, four tabs (herdr's own advice: "use tabs to separa
 | Tab | Panes |
 |---|---|
 | `lead` | the lead you talk to, plus your nvim sidebar (`prefix+e`) |
-| `agents` | architect, tracker, coder |
+| `agents` | architect, tracker, coder, plus a pane for each area specialist the coder starts (e.g. `rl-coder-devops`) |
 | `checks` | test runs; a dev server and its logs when needed |
 | `review` | reviewer, pr |
 

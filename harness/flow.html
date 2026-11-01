@@ -52,7 +52,7 @@ footer { font-size: 13px; color: var(--muted); }
 
   <section>
     <h2>Who talks to whom</h2>
-    <p>Helpers never talk to each other. Every message goes through the lead, which runs <code>herdr agent prompt</code> and <code>herdr agent read</code>.</p>
+    <p>Helpers never talk to each other, except the coder and the area specialists it starts. Every other message goes through the lead, which runs <code>herdr agent prompt</code> and <code>herdr agent read</code>.</p>
     <div class="frame">
 <pre class="mermaid">
 flowchart TB
@@ -77,7 +77,7 @@ flowchart TB
         <thead><tr><th>Tab</th><th>Panes</th><th>When you look</th></tr></thead>
         <tbody>
           <tr><td>lead</td><td>The lead you talk to, plus your nvim sidebar (<code>prefix+e</code>)</td><td>Always</td></tr>
-          <tr><td>agents</td><td>architect, tracker, coder</td><td>To watch the work happen</td></tr>
+          <tr><td>agents</td><td>architect, tracker, coder, plus a pane for each area specialist the coder starts (e.g. <code>rl-coder-devops</code>)</td><td>To watch the work happen</td></tr>
           <tr><td>checks</td><td>Test runs; a dev server and its logs when a sub-task needs the app running</td><td>When tests fail</td></tr>
           <tr><td>review</td><td>reviewer, pr</td><td>At the PR gate</td></tr>
         </tbody>

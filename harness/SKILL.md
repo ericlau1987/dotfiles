@@ -25,7 +25,7 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
    | Tab | Panes |
    |---|---|
    | `lead` | you (and the user's nvim sidebar, `prefix+e`) |
-   | `agents` | architect (root pane), tracker (split right), coder (split down; the widest pane) |
+   | `agents` | architect (root pane), tracker (split right), coder (split down; the widest pane), plus one pane per area specialist the coder starts |
    | `checks` | a plain shell for test runs (root pane); a second shell split right only when a sub-task needs a dev server or logs |
    | `review` | reviewer (root pane), pr (split right) |
 
@@ -45,7 +45,8 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
    Wait for its `TRACKER PLAN`. If it replies `TRACKER ASK`, relay the question to the user.
 2. **Coder, reviewer, pr.** Split the `agents` tab down and start `<p>-coder` (`roles/coder.md`). In the `review` tab root pane start
    `<p>-reviewer` (`roles/reviewer.md`), then split it right and start `<p>-pr` (`roles/pr.md`). Prompt each once:
-   `Read ~/.claude/skills/harness/roles/<role>.md and follow it. Reply READY.`
+   `Read ~/.claude/skills/harness/roles/<role>.md and follow it. Prefix <p>. Reply READY.`
+   The coder starts its own area specialists (`<p>-coder-<area>`) in new panes in the `agents` tab when a sub-task spans areas.
    Keep the same coder and reviewer for the whole task so they remember earlier rounds.
    The pr agent is the only one that commits, pushes and opens PRs.
 3. **Find the checks once.** Read the repo's CI (`.github/workflows/*.yml`) and scripts (`package.json`, `pyproject.toml`,
