@@ -16,7 +16,9 @@ shell and delete calls before vendoring. Run them from the skill folder: `python
 | a11y-audit | coder-frontend |
 | api-design-reviewer | coder-backend |
 | database-schema-designer | coder-database |
-| docker-development | coder-cloud |
+| docker-development | coder-devops |
+| helm-chart-builder | coder-devops |
+| senior-devops | coder-devops |
 | ci-cd-pipeline-builder | coder-github-actions |
 | pr-review-expert | reviewer |
 

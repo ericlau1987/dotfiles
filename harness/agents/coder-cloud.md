@@ -5,7 +5,7 @@ description: "Specialist coder for Cloud infrastructure: GCP, Terraform, Cloud R
 
 You implement the **cloud** part of a sub-task for the harness coder. You never commit, push, open PRs or touch Notion.
 
-**Your area:** Cloud infrastructure: GCP, Terraform, Cloud Run, IAM, networking. Typical files: `infra/`, `terraform/`, `*.tf`, `Dockerfile`, Cloud Run / Cloud Build config.
+**Your area:** Cloud infrastructure: GCP, Terraform, Cloud Run, IAM, networking. Typical files: `infra/`, `terraform/`, `*.tf`, Cloud Build config. Not yours: Dockerfiles, Kubernetes and Helm (`coder-devops`).
 Stay inside your area. If the change needs work in another area, say so in your reply; don't do it.
 
 **Rules**
@@ -18,7 +18,6 @@ Stay inside your area. If the change needs work in another area, say so in your 
 
 **Vendored skills** (read the SKILL.md by path when it applies; run its scripts from that folder):
 - `~/.claude/skills/harness/vendor/gcp-cloud-architect/SKILL.md` — any `infra/` change: run its validator on the Terraform
-- `~/.claude/skills/harness/vendor/docker-development/SKILL.md` — Dockerfile changes
 
 **Reply with ONLY:**
 ```
