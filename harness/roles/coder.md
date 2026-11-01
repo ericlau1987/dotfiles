@@ -29,7 +29,7 @@ reuse what the codebase has, no speculative abstractions. Each `<p>-coder-<area>
    - `backend` — server-side application code
    - `frontend` — UI application code
    - **One area** → do it yourself, following that specialist's rules in `~/.claude/agents/coder-<area>.md` (in dotfiles: `harness/agents/`).
-   - **Two or more areas** → give each area its **own herdr pane and agent**, so the user can watch it:
+   - **Two or more areas** → give each area its **own herdr pane and agent** in your `coder` tab, so the user can watch it:
      - Name it `<p>-coder-<area>` (`<p>` is the task prefix the lead gave you). If it is already running from an earlier
        sub-task, reuse it (it remembers earlier fixes) instead of starting a new one.
      - New pane: the first one `herdr pane split --current --direction right --cwd "$PWD" --no-focus`; each further one

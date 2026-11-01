@@ -23,14 +23,17 @@ flowchart TB
 
 ## Tabs
 
-One herdr workspace per repo, four tabs (herdr's own advice: "use tabs to separate views like agents, logs, server, or review"):
+One herdr workspace per repo, one tab per agent (herdr's own advice: "use tabs to separate views"):
 
-| Tab | Panes |
-|---|---|
-| `lead` | the lead you talk to, plus your nvim sidebar (`prefix+e`) |
-| `agents` | architect, tracker, coder, plus a pane for each area specialist the coder starts (e.g. `rl-coder-devops`) |
-| `checks` | test runs; a dev server and its logs when needed |
-| `review` | reviewer, pr |
+| # | Tab | Panes |
+|---|---|---|
+| 1 | `lead` | the lead you talk to, plus your nvim sidebar (`prefix+e`) |
+| 2 | `architect` | architect |
+| 3 | `tracker` | tracker |
+| 4 | `coder` | coder, plus a pane for each area specialist it starts (e.g. `rl-coder-devops`) |
+| 5 | `reviewer` | reviewer |
+| 6 | `pr` | pr |
+| 7 | `checks` | test runs; a dev server and its logs when needed |
 
 Agent names carry a task prefix (e.g. `rl-coder`) because herdr names are unique across the whole server.
 
@@ -40,7 +43,7 @@ Tabs (numbers assume the harness created them in a fresh workspace; other open t
 
 | Keys | Does |
 |---|---|
-| `ctrl+b` `1` / `2` / `3` / `4` | jump to lead / agents / checks / review |
+| `ctrl+b` `1` … `7` | jump to lead / architect / tracker / coder / reviewer / pr / checks |
 | `ctrl+b` `n` / `p` | next / previous tab |
 | `ctrl+b` `g` | go-to picker |
 

@@ -71,15 +71,18 @@ flowchart TB
 
   <section>
     <h2>Tabs</h2>
-    <p>One herdr workspace per repo, split into four tabs, following herdr's advice to "use tabs to separate views like agents, logs, server, or review". Your focus stays on <code>lead</code>.</p>
+    <p>One herdr workspace per repo and one tab per agent, so each agent's work is easy to find. Your focus stays on <code>lead</code>.</p>
     <div class="tablewrap">
       <table>
         <thead><tr><th>Tab</th><th>Panes</th><th>When you look</th></tr></thead>
         <tbody>
-          <tr><td>lead</td><td>The lead you talk to, plus your nvim sidebar (<code>prefix+e</code>)</td><td>Always</td></tr>
-          <tr><td>agents</td><td>architect, tracker, coder, plus a pane for each area specialist the coder starts (e.g. <code>rl-coder-devops</code>)</td><td>To watch the work happen</td></tr>
-          <tr><td>checks</td><td>Test runs; a dev server and its logs when a sub-task needs the app running</td><td>When tests fail</td></tr>
-          <tr><td>review</td><td>reviewer, pr</td><td>At the PR gate</td></tr>
+          <tr><td>1 lead</td><td>The lead you talk to, plus your nvim sidebar (<code>prefix+e</code>)</td><td>Always</td></tr>
+          <tr><td>2 architect</td><td>architect</td><td>At the design gate</td></tr>
+          <tr><td>3 tracker</td><td>tracker</td><td>To see Notion updates happen</td></tr>
+          <tr><td>4 coder</td><td>coder, plus a pane for each area specialist it starts (e.g. <code>rl-coder-devops</code>)</td><td>To watch the code being written</td></tr>
+          <tr><td>5 reviewer</td><td>reviewer</td><td>At the PR gate</td></tr>
+          <tr><td>6 pr</td><td>pr</td><td>If a push or PR fails</td></tr>
+          <tr><td>7 checks</td><td>Test runs; a dev server and its logs when needed</td><td>When tests fail</td></tr>
         </tbody>
       </table>
     </div>
@@ -94,7 +97,7 @@ flowchart TB
       <table>
         <thead><tr><th>Keys</th><th>Does</th></tr></thead>
         <tbody>
-          <tr><td>ctrl+b 1 / 2 / 3 / 4</td><td>Jump to lead / agents / checks / review</td></tr>
+          <tr><td>ctrl+b 1 … 7</td><td>Jump to lead / architect / tracker / coder / reviewer / pr / checks</td></tr>
           <tr><td>ctrl+b n / p</td><td>Next / previous tab</td></tr>
           <tr><td>ctrl+b g</td><td>Go-to picker</td></tr>
         </tbody>
