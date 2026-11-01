@@ -19,6 +19,12 @@ type = "plugin_action"
 command = "chmarax.herdr-nvim.pick-file"
 description = "open file from agent output"
 
+[[keys.command]]
+key = "prefix+d"
+type = "plugin_action"
+command = "persiyanov.reviewr.toggle"
+description = "reviewr: review the agent's diff"
+
 # >>> furkankly.zoetrope keys (managed: `setup-keys` writes this block, `remove-keys` deletes it)
 [[keys.command]]
 key = "prefix+shift+z"

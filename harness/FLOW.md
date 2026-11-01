@@ -63,6 +63,7 @@ nvim sidebar (custom bindings in [`herdr/config.toml`](../herdr/config.toml)):
 | `ctrl+b` `e` | open / close the nvim sidebar |
 | `ctrl+b` `shift+o` | pick a file the agent touched |
 | `ctrl+b` `shift+e` | herdr's edit scrollback (moved off `e`) |
+| `ctrl+b` `d` | reviewr: review the agent's diff, comment on lines, `s` sends them to the agent (needs herdr ≥ 0.9.3) |
 | `ctrl+b` `shift+z` | zoetrope: live graph of the focused agent's session and tool calls (same key closes it) |
 
 `ctrl+b` `?` shows every key.

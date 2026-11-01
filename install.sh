@@ -39,6 +39,13 @@ if command -v herdr >/dev/null; then
   herdr integration install claude >/dev/null   # session ids per pane, for zoetrope
   grep -q furkankly.zoetrope ~/.config/herdr/plugins.json 2>/dev/null || herdr plugin install furkankly/zoetrope/herdr-plugin --yes
   # its key (prefix+shift+z) is already in herdr/config.toml
+  # reviewr (diff review pane, key prefix+d in herdr/config.toml) needs herdr >= 0.9.3
+  hv=$(herdr --version | awk '{print $2}')
+  if [ "$(printf '%s\n0.9.3\n' "$hv" | sort -V | head -1)" = "0.9.3" ]; then
+    grep -q persiyanov.reviewr ~/.config/herdr/plugins.json 2>/dev/null || herdr plugin install persiyanov/herdr-reviewr --yes
+  else
+    echo "herdr $hv < 0.9.3: skipping reviewr (brew upgrade herdr, restart herdr, rerun)"
+  fi
   grep -q chmarax.herdr-nvim ~/.config/herdr/plugins.json 2>/dev/null || herdr plugin install ChmaraX/herdr-nvim
 else
   echo "herdr not installed: brew install herdr, then rerun"
