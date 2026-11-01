@@ -39,6 +39,11 @@ if command -v herdr >/dev/null; then
   herdr integration install claude >/dev/null   # session ids per pane, for zoetrope
   grep -q furkankly.zoetrope ~/.config/herdr/plugins.json 2>/dev/null || herdr plugin install furkankly/zoetrope/herdr-plugin --yes
   # its key (prefix+shift+z) is already in herdr/config.toml
+  # herdr-radar: readable agent sidebar (its blocks are already in herdr/config.toml; font + Ghostty map need the action)
+  grep -q hhdebb.herdr-radar ~/.config/herdr/plugins.json 2>/dev/null || {
+    herdr plugin install hhdebb/herdr-radar --yes
+    herdr plugin action invoke install-font --plugin hhdebb.herdr-radar
+  }
   # reviewr (diff review pane, key prefix+d in herdr/config.toml) needs herdr >= 0.9.3
   hv=$(herdr --version | awk '{print $2}')
   if [ "$(printf '%s\n0.9.3\n' "$hv" | sort -V | head -1)" = "0.9.3" ]; then
