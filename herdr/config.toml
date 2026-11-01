@@ -3,8 +3,12 @@ onboarding = false
 [ui.toast]
 delivery = "herdr"
 
+[keys]
+# moved off prefix+e so the nvim sidebar can use it
+edit_scrollback = "prefix+shift+e"
+
 [[keys.command]]
-key = "prefix+shift+e"
+key = "prefix+e"
 type = "plugin_action"
 command = "chmarax.herdr-nvim.toggle"
 description = "nvim sidebar"
