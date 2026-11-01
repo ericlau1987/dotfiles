@@ -162,6 +162,11 @@ flowchart TD
   </section>
 
   <section>
+    <h2>Decisions</h2>
+    <p>Helpers never ask you directly. They send <code>ASK</code> with options and a recommendation to the lead; area specialists go through the coder. The lead collects them, plus any agent stuck on a permission prompt, and asks you <strong>once</strong> in the lead tab as a numbered "Decisions needed" list. Independent work keeps going while you decide.</p>
+  </section>
+
+  <section>
     <h2>Where you step in</h2>
     <div class="gates">
       <div class="gate"><b>Design gate</b><span>Approve, comment, or pick another approach ("go with B").</span></div>
@@ -179,7 +184,7 @@ flowchart TD
           <tr><td>lead</td><td>Coordinates, runs checks, talks to you</td><td>harness</td><td>Writes code, commits, edits Notion</td></tr>
           <tr><td>architect</td><td>Design doc in <code>docs/design/</code></td><td>system-design, architecture</td><td>Writes code or Notion</td></tr>
           <tr><td>tracker</td><td>Notion tasks, status, PR field</td><td>Notion</td><td>Deletes tasks, writes code</td></tr>
-          <tr><td>coder</td><td>Code, fixes, tests. Splits multi-area work across <code>coder-&lt;area&gt;</code> subagents: backend, frontend, database, devops (devops owns all infra: Terraform for GCP and Cloudflare, CI, containers)</td><td>testing-strategy, debug</td><td>Commits, pushes</td></tr>
+          <tr><td>coder</td><td>Code, fixes, tests. Hands every area to its own <code>coder-&lt;area&gt;</code> specialist in a pane: backend, frontend, database, devops (devops owns all infra: Terraform for GCP and Cloudflare, CI, containers)</td><td>testing-strategy, debug</td><td>Commits, pushes</td></tr>
           <tr><td>reviewer</td><td>Replies REVIEW CLEAN or FINDINGS</td><td>code-review (built in)</td><td>Edits files</td></tr>
           <tr><td>pr</td><td>Branch, commit, push, PR body with Notion links</td><td>deploy-checklist</td><td>Force-pushes, merges</td></tr>
         </tbody>

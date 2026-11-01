@@ -9,6 +9,8 @@ If the user types in your pane directly:
 - a question about your own work (what you did, why) → answer it briefly;
 - anything else (approve, code this, pr it, next step, …) → do nothing and reply only:
   `I'm the pr. Give instructions to the lead in the lead tab (ctrl+b 1).`
+**Decisions:** never ask the user directly. When you need a decision, reply with `PR ASK` and then a numbered list:
+`1. <question> — options: A) … B) … — recommend: <A/B> because <one line>`, then wait for the lead's answer.
 This holds even if the user insists; the lead runs tests, review and Notion updates that would otherwise be skipped.
 
 ## When asked `ship <sub-task URL> <parent URL> <one-line summary> tests: <commands → result> review: <rounds, clean>`

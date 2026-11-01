@@ -8,8 +8,18 @@ disable-model-invocation: true
 
 When the user starts a task with `/harness`, run this flow on top of the Herdr rules below.
 You are the **lead**: you coordinate, run checks and talk to the user. You never edit code yourself; the `coder` agent does.
-Every time you stop for the user (design gate, PR gate, stuck, `ASK` relays), end the message with
+Every time you stop for the user (design gate, PR gate, stuck, decisions), end the message with
 **"Reply here in the `lead` tab."** Helpers refuse instructions typed into their own panes.
+
+**Decisions — one place, one batch.** Helpers never ask the user; they reply `<ROLE> ASK` with numbered questions,
+options and a recommendation (area specialists ask the coder, the coder passes real decisions up as `CODE ASK`).
+- Collect every pending `ASK` from all agents, plus any agent whose herdr state is `blocked` (read it with
+  `herdr agent read <name>` to see the prompt; never approve a permission or dialog yourself).
+- Ask the user **once**, in the lead tab, as a single "Decisions needed" list: number each item, say which agent asks,
+  give the options and the recommendation, and the default you will use if they just say "go with your picks".
+- Keep independent work going while you wait; pause only the agents whose question is open. If a question blocks
+  everything, ask right away and include every other open question in the same message.
+- Answer each agent with exactly its part of the user's reply (send `blocked` dialogs keys with `herdr agent send-keys`).
 The user explicitly wants the tab layout below, so create these tabs even though the Herdr rules default to sibling panes.
 
 Preflight. **Install skills before starting any agent** (agents only load skills at startup):
@@ -20,7 +30,9 @@ Preflight. **Install skills before starting any agent** (agents only load skills
    The reviewer's `code-review` skill is built into Claude Code and cannot be installed; if missing, the reviewer reads the diff itself.
 
 Layout. One workspace per repo (the one you are in). Keep your own tab as **`lead`** (`herdr tab rename "$HERDR_TAB_ID" lead`).
-   **One tab per agent.** Create these tabs up front, in this order, so their numbers are stable (`ctrl+b 1`…`7`):
+   **One tab per agent.** Create these tabs up front, **one at a time, in exactly this order**, so their numbers are stable
+   (`ctrl+b 1`…`7`). Then run `herdr tab list --workspace "$HERDR_WORKSPACE_ID"` and check the labels are in this order before
+   starting any agent; if not, close the extra tabs you created and recreate them in order.
    `herdr tab create --workspace "$HERDR_WORKSPACE_ID" --cwd "$PWD" --label <label> --no-focus`, reading each root pane from
    `.result.root_pane.pane_id`. Never move the user's focus off `lead`.
 
@@ -29,7 +41,7 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
    | 1 | `lead` | you (and the user's nvim sidebar, `prefix+e`) |
    | 2 | `architect` | `<p>-architect` |
    | 3 | `tracker` | `<p>-tracker` |
-   | 4 | `coder` | `<p>-coder` (root pane), plus one pane per area specialist it starts (`<p>-coder-<area>`) |
+   | 4 | `coder` | `<p>-coder` (root pane), plus one pane per area specialist (`<p>-coder-<area>`), started for every coded sub-task |
    | 5 | `reviewer` | `<p>-reviewer` |
    | 6 | `pr` | `<p>-pr` |
    | 7 | `checks` | a plain shell for test runs (root pane); a second shell split right only when a sub-task needs a dev server or logs |

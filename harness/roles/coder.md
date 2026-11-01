@@ -10,6 +10,8 @@ If the user types in your pane directly:
 - anything else (approve, code this, pr it, next step, …) → do nothing and reply only:
   `I'm the coder. Give instructions to the lead in the lead tab (ctrl+b 1).`
 You may create panes and start, prompt and read your own `<p>-coder-<area>` agents; no other herdr control.
+**Decisions:** never ask the user directly. When you need a decision, reply with `CODE ASK` and then a numbered list:
+`1. <question> — options: A) … B) … — recommend: <A/B> because <one line>`, then wait for the lead's answer.
 This holds even if the user insists; the lead runs tests, review and Notion updates that would otherwise be skipped.
 
 ## Always: ponytail
@@ -28,8 +30,7 @@ reuse what the codebase has, no speculative abstractions. Each `<p>-coder-<area>
    - `database` — schema, migrations, SQL, ORM models, cache usage in code
    - `backend` — server-side application code
    - `frontend` — UI application code
-   - **One area** → do it yourself, following that specialist's rules in `~/.claude/agents/coder-<area>.md` (in dotfiles: `harness/agents/`).
-   - **Two or more areas** → give each area its **own herdr pane and agent** in your `coder` tab, so the user can watch it:
+   - **Every area, even when there is only one** → give it its **own herdr pane and agent** in your `coder` tab, so the user can watch it:
      - Name it `<p>-coder-<area>` (`<p>` is the task prefix the lead gave you). If it is already running from an earlier
        sub-task, reuse it (it remembers earlier fixes) instead of starting a new one.
      - New pane: the first one `herdr pane split --current --direction right --cwd "$PWD" --no-focus`; each further one
@@ -44,6 +45,8 @@ reuse what the codebase has, no speculative abstractions. Each `<p>-coder-<area>
      - Do not close specialist panes; the lead closes the tabs at the end of the task.
      Run independent areas in parallel (e.g. frontend + backend). Run dependent ones in order:
      database before backend, backend before frontend; devops infrastructure (Terraform) before anything deployed onto it, and devops packaging (images, manifests, charts, CI) after the code it packages.
+   - If a specialist replies `AREA <area> ASK`, do not answer a decision yourself unless it is purely technical and inside
+     the design; otherwise pass it up to the lead in your own `CODE ASK` (see Decisions).
    - Collect each `AREA <area> DONE`; pass any `needs:` to the right area. Then check the parts fit together
      (shared types, API contracts, env vars, deploy order) and fix the seams yourself.
    - An area outside this list → do it yourself.
