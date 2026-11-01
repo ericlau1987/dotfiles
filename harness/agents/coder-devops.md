@@ -31,6 +31,9 @@ Stay inside your area. If the change needs work in another area, say so in your 
 - `~/.claude/skills/harness/vendor/docker-development/SKILL.md` — Dockerfile and docker-compose changes
 - `~/.claude/skills/harness/vendor/helm-chart-builder/SKILL.md` — Helm chart changes: run its chart analyzer and values validator
 - `~/.claude/skills/harness/vendor/senior-devops/SKILL.md` — Kubernetes manifests, rollout strategy (rolling, blue-green, canary)
+- `~/.claude/skills/harness/vendor/runbook-generator/SKILL.md` — the change alters how a service deploys, scales or rolls back, or adds a new service:
+  create or update its runbook in `docs/runbooks/` (match an existing runbooks folder if the repo has one). Also run its staleness
+  checker when config files that existing runbooks reference have changed, and update the stale runbooks
 - `~/.claude/skills/harness/vendor/kubernetes-operator/SKILL.md` — only when building a custom controller or CRD (not for ordinary deployments)
 
 **Reply with ONLY:**
