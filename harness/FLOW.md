@@ -34,6 +34,35 @@ One herdr workspace per repo, four tabs (herdr's own advice: "use tabs to separa
 
 Agent names carry a task prefix (e.g. `rl-coder`) because herdr names are unique across the whole server.
 
+## Keys (terminal herdr, prefix `ctrl+b`)
+
+Tabs (numbers assume the harness created them in a fresh workspace; other open tabs shift them):
+
+| Keys | Does |
+|---|---|
+| `ctrl+b` `1` / `2` / `3` / `4` | jump to lead / agents / checks / review |
+| `ctrl+b` `n` / `p` | next / previous tab |
+| `ctrl+b` `g` | go-to picker |
+
+Panes:
+
+| Keys | Does |
+|---|---|
+| `ctrl+b` `h` / `j` / `k` / `l` | move left / down / up / right |
+| `ctrl+b` `tab` | cycle panes |
+| `ctrl+b` `z` | zoom one pane full screen (again to restore) |
+| `ctrl+b` `x` | close pane (ends what's running in it) |
+
+nvim sidebar (custom bindings in [`herdr/config.toml`](../herdr/config.toml)):
+
+| Keys | Does |
+|---|---|
+| `ctrl+b` `e` | open / close the nvim sidebar |
+| `ctrl+b` `shift+o` | pick a file the agent touched |
+| `ctrl+b` `shift+e` | herdr's edit scrollback (moved off `e`) |
+
+`ctrl+b` `?` shows every key.
+
 ## The whole flow
 
 ```mermaid
