@@ -69,6 +69,23 @@ flowchart TB
   </section>
 
   <section>
+    <h2>Tabs</h2>
+    <p>One herdr workspace per repo, split into four tabs, following herdr's advice to "use tabs to separate views like agents, logs, server, or review". Your focus stays on <code>lead</code>.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Tab</th><th>Panes</th><th>When you look</th></tr></thead>
+        <tbody>
+          <tr><td>lead</td><td>The lead you talk to, plus your nvim sidebar (<code>prefix+e</code>)</td><td>Always</td></tr>
+          <tr><td>agents</td><td>architect, tracker, coder</td><td>To watch the work happen</td></tr>
+          <tr><td>checks</td><td>Test runs; a dev server and its logs when a sub-task needs the app running</td><td>When tests fail</td></tr>
+          <tr><td>review</td><td>reviewer, pr</td><td>At the PR gate</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Agent names carry a task prefix such as <code>rl-coder</code>, because herdr names are unique across the whole server.</p>
+  </section>
+
+  <section>
     <h2>The whole flow</h2>
     <div class="frame">
 <pre class="mermaid">

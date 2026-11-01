@@ -21,6 +21,19 @@ flowchart TB
   LEAD --> CHK["checks pane<br/>lint · test · build"]
 ```
 
+## Tabs
+
+One herdr workspace per repo, four tabs (herdr's own advice: "use tabs to separate views like agents, logs, server, or review"):
+
+| Tab | Panes |
+|---|---|
+| `lead` | the lead you talk to, plus your nvim sidebar (`prefix+e`) |
+| `agents` | architect, tracker, coder |
+| `checks` | test runs; a dev server and its logs when needed |
+| `review` | reviewer, pr |
+
+Agent names carry a task prefix (e.g. `rl-coder`) because herdr names are unique across the whole server.
+
 ## The whole flow
 
 ```mermaid

@@ -7,6 +7,7 @@ description: "Control Herdr, a terminal multiplexer for coding agents. Use only 
 
 When the user starts a task with `/harness`, run this flow on top of the Herdr rules below.
 You are the **lead**: you coordinate, run checks and talk to the user. You never edit code yourself; the `coder` agent does.
+The user explicitly wants the tab layout below, so create these tabs even though the Herdr rules default to sibling panes.
 
 Preflight. **Install skills before starting any agent** (agents only load skills at startup):
    `claude plugin list | grep -q engineering@knowledge-work-plugins || (claude plugin marketplace add anthropics/knowledge-work-plugins && claude plugin install engineering@knowledge-work-plugins)`
@@ -14,27 +15,47 @@ Preflight. **Install skills before starting any agent** (agents only load skills
    `claude plugin list | grep -q cloudflare@cloudflare || (claude plugin marketplace add cloudflare/skills && claude plugin install cloudflare@cloudflare)`
    If an install fails, tell the user the exact error and ask whether to continue without those skills.
    The reviewer's `code-review` skill is built into Claude Code and cannot be installed; if missing, the reviewer reads the diff itself.
-0. **Architect first.** Split a pane and start a `claude` agent named `architect`. Prompt it:
+
+Layout. One workspace per repo (the one you are in). Keep your own tab as **`lead`** (`herdr tab rename "$HERDR_TAB_ID" lead`).
+   Create three more tabs in the same workspace with `herdr tab create --workspace "$HERDR_WORKSPACE_ID" --cwd "$PWD" --label <label> --no-focus`,
+   reading each root pane from `.result.root_pane.pane_id`. Never move the user's focus off `lead`.
+
+   | Tab | Panes |
+   |---|---|
+   | `lead` | you (and the user's nvim sidebar, `prefix+e`) |
+   | `agents` | architect (root pane), tracker (split right), coder (split down; the widest pane) |
+   | `checks` | a plain shell for test runs (root pane); a second shell split right only when a sub-task needs a dev server or logs |
+   | `review` | reviewer (root pane), pr (split right) |
+
+   **Names.** Pick a short task prefix `<p>` (2–4 lowercase letters from the task, e.g. `rl` for rate limiting) and name agents
+   `<p>-architect`, `<p>-tracker`, `<p>-coder`, `<p>-reviewer`, `<p>-pr`. Agent names are unique across the whole herdr server,
+   so the prefix keeps two harness runs in different repos from clashing. If a name is taken, pick another prefix.
+   Below, `architect`, `coder` etc. mean these prefixed names.
+
+0. **Architect first.** In the `agents` tab root pane, start a `claude` agent named `<p>-architect`. Prompt it:
    `Read ~/.claude/skills/harness/roles/architect.md and follow it. design <the user's task, repo path, branch>`
    - `DESIGN SKIP` → go to step 1 without a doc.
    - `DESIGN READY <path>` → **design gate:** show the user the doc path, summary and open questions, and wait.
      Comments → architect `revise <comments>` → show again. Approved → architect: `the user approved; set Status: Approved`.
      Do not start step 1 until the design is approved.
-1. **Tracker next.** Split a pane and start a `claude` agent named `tracker`. Prompt it:
+1. **Tracker next.** Split the architect pane right and start a `claude` agent named `<p>-tracker`. Prompt it:
    `Read ~/.claude/skills/harness/roles/tracker.md and follow it. plan <the user's task, repo path, branch> [design <doc path>]`
    Wait for its `TRACKER PLAN`. If it replies `TRACKER ASK`, relay the question to the user.
-2. **Reviewer second.** Split a pane and start a `claude` agent named `reviewer`. Prompt it once:
-   `Read ~/.claude/skills/harness/roles/reviewer.md and follow it. Reply READY.`
-   Keep this one reviewer for the whole task so it remembers earlier rounds.
-   Then start `claude` agents named `coder` (`roles/coder.md`) and `pr` (`roles/pr.md`) the same way.
-   Keep the same coder for the whole task so it remembers earlier fixes. The pr agent is the only one that commits, pushes and opens PRs.
+2. **Coder, reviewer, pr.** Split the `agents` tab down and start `<p>-coder` (`roles/coder.md`). In the `review` tab root pane start
+   `<p>-reviewer` (`roles/reviewer.md`), then split it right and start `<p>-pr` (`roles/pr.md`). Prompt each once:
+   `Read ~/.claude/skills/harness/roles/<role>.md and follow it. Reply READY.`
+   Keep the same coder and reviewer for the whole task so they remember earlier rounds.
+   The pr agent is the only one that commits, pushes and opens PRs.
 3. **Find the checks once.** Read the repo's CI (`.github/workflows/*.yml`) and scripts (`package.json`, `pyproject.toml`,
    `justfile`, `Makefile`) and list the commands CI runs: lint, typecheck, test, build. Run only those for the parts
-   the sub-task touches. Split a pane named for running them (a plain shell, not an agent), and reuse it.
+   the sub-task touches, in the `checks` tab root pane (a plain shell, not an agent). Reuse it.
+   If a sub-task needs the app running, split the checks pane right, start the dev server there, and read its logs from that pane.
 4. **Loop each sub-task**, in the order the tracker's plan gives:
    1. **Code.** Coder: `code <sub-task URL> <goal and plan from the tracker> [design <doc path>]`. Wait for `CODE DONE`
       (on `CODE ASK`, answer it or ask the user). Then tracker: `update <sub-task URL> started: <what you changed>`.
    2. **Test.** In the checks pane: `herdr pane run <pane> "<checks>"`, then `herdr pane wait-output` and `pane read`.
+      Match on something every run prints (e.g. a final exit marker: append `; echo "CHECKS_EXIT=$?"` and wait for `CHECKS_EXIT=`),
+      not on success text, so a failing run does not time out.
       If anything fails, coder: `fix attempt <n> <the failing output>` (n counts failed runs for this sub-task), then test again. A test failure does not count as a review round.
       After 3 failed test runs in a row, tracker: `update <sub-task URL> blocked: tests failing: <error>`, and ask the user.
    3. **Review.** Only once tests pass. Reviewer: `review <scope>` (e.g. `uncommitted`, or the commit range).
@@ -44,8 +65,8 @@ Preflight. **Install skills before starting any agent** (agents only load skills
       Wait for `PR OK <url>`; on `PR ASK`, fix it or ask the user. Then tracker: `update <sub-task URL> review clean, tests pass, PR <url>`.
       Do not commit or push yourself.
    6. **Manual review gate.** Stop and ask the user to review the PR. Show: the PR URL, the Notion sub-task URL,
-      a 3-line summary of the change, and what checks ran. If `herdr notification` can alert the user, send one.
-      Then wait. Do not start the next sub-task until the user answers.
+      a 3-line summary of the change, what checks ran, and "the reviewer's notes are in the `review` tab".
+      If `herdr notification` can alert the user, send one. Then wait. Do not start the next sub-task until the user answers.
       - **Approved** → tracker: `update <sub-task URL> manual review approved PR <url>`, then the next sub-task.
       - **Changes requested** → tracker: `update <sub-task URL> manual review: <the user's comments>`.
         Treat the comments as findings: coder `fix <the user's comments>` → test → review → pr agent `ship` (updates the same PR) → this gate again.
@@ -53,7 +74,9 @@ Preflight. **Install skills before starting any agent** (agents only load skills
    7. **Stop after 3 review rounds** that still have findings. Tracker: `update <sub-task URL> blocked after 3 review rounds: <open findings>`,
       then show the user the open findings and ask how to proceed. Do not start the next sub-task.
    Never skip tests, review or the manual review gate, and never mark a sub-task done yourself; the tracker sets status.
-5. When everything is done, tell the user the final tracker status, and ask before closing panes you created.
+   If any `--wait` times out or stalls, read the agent before re-sending: a timeout does not prove the prompt was not delivered.
+   For long agent replies, ask the agent to write them to a Markdown file and reply with the path.
+5. When everything is done, tell the user the final tracker status, and ask before closing the `agents`, `checks` and `review` tabs you created.
 
 # Herdr
 
