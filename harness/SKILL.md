@@ -6,6 +6,7 @@ description: "Control Herdr, a terminal multiplexer for coding agents. Use only 
 # Harness flow
 
 When the user starts a task with `/harness`, run this flow on top of the Herdr rules below.
+You are the **lead**: you coordinate, run checks and talk to the user. You never edit code yourself; the `coder` agent does.
 
 1. **Tracker first.** Split a pane and start a `claude` agent named `tracker`. Prompt it:
    `Read ~/.claude/skills/harness/roles/tracker.md and follow it. plan <the user's task, repo path, branch>`
@@ -13,18 +14,20 @@ When the user starts a task with `/harness`, run this flow on top of the Herdr r
 2. **Reviewer second.** Split a pane and start a `claude` agent named `reviewer`. Prompt it once:
    `Read ~/.claude/skills/harness/roles/reviewer.md and follow it. Reply READY.`
    Keep this one reviewer for the whole task so it remembers earlier rounds.
-   Then start a `claude` agent named `pr` the same way with `roles/pr.md`. It is the only one that commits, pushes and opens PRs.
+   Then start `claude` agents named `coder` (`roles/coder.md`) and `pr` (`roles/pr.md`) the same way.
+   Keep the same coder for the whole task so it remembers earlier fixes. The pr agent is the only one that commits, pushes and opens PRs.
 3. **Find the checks once.** Read the repo's CI (`.github/workflows/*.yml`) and scripts (`package.json`, `pyproject.toml`,
    `justfile`, `Makefile`) and list the commands CI runs: lint, typecheck, test, build. Run only those for the parts
    the sub-task touches. Split a pane named for running them (a plain shell, not an agent), and reuse it.
 4. **Loop each sub-task**, in the order the tracker's plan gives:
-   1. **Code.** Do the sub-task. Then tracker: `update <sub-task URL> started: <what you changed>`.
+   1. **Code.** Coder: `code <sub-task URL> <goal and plan from the tracker>`. Wait for `CODE DONE`
+      (on `CODE ASK`, answer it or ask the user). Then tracker: `update <sub-task URL> started: <what you changed>`.
    2. **Test.** In the checks pane: `herdr pane run <pane> "<checks>"`, then `herdr pane wait-output` and `pane read`.
-      If anything fails, fix it and test again. A test failure does not count as a review round.
+      If anything fails, coder: `fix <the failing output>`, then test again. A test failure does not count as a review round.
       After 3 failed test runs in a row, tracker: `update <sub-task URL> blocked: tests failing: <error>`, and ask the user.
    3. **Review.** Only once tests pass. Reviewer: `review <scope>` (e.g. `uncommitted`, or the commit range).
    4. **If `REVIEW FINDINGS`:** tracker: `update <sub-task URL> review round <n>: <the numbered findings>`.
-      Fix every finding, then go back to step 2 (test, then review round n+1).
+      Coder: `fix <the numbered findings>`. Pass any `disputed` items to the reviewer in the next round. Then go back to step 2 (test, then review round n+1).
    5. **If `REVIEW CLEAN`:** pr agent: `ship <sub-task URL> <parent URL> <one-line summary> tests: <commands → result> review: <n> rounds, clean`.
       Wait for `PR OK <url>`; on `PR ASK`, fix it or ask the user. Then tracker: `update <sub-task URL> review clean, tests pass, PR <url>`.
       Do not commit or push yourself.
@@ -33,7 +36,7 @@ When the user starts a task with `/harness`, run this flow on top of the Herdr r
       Then wait. Do not start the next sub-task until the user answers.
       - **Approved** → tracker: `update <sub-task URL> manual review approved PR <url>`, then the next sub-task.
       - **Changes requested** → tracker: `update <sub-task URL> manual review: <the user's comments>`.
-        Treat the comments as findings: fix → test → review → pr agent `ship` (updates the same PR) → this gate again.
+        Treat the comments as findings: coder `fix <the user's comments>` → test → review → pr agent `ship` (updates the same PR) → this gate again.
       Approval does not mean merge. Never merge unless the user says so.
    7. **Stop after 3 review rounds** that still have findings. Tracker: `update <sub-task URL> blocked after 3 review rounds: <open findings>`,
       then show the user the open findings and ask how to proceed. Do not start the next sub-task.
