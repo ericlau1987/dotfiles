@@ -31,9 +31,9 @@ One herdr workspace per repo, one tab per agent (herdr's own advice: "use tabs t
 | 2 | `architect` | architect |
 | 3 | `tracker` | tracker |
 | 4 | `coder` | coder, plus a pane for each area specialist it starts (e.g. `rl-coder-devops`) |
-| 5 | `reviewer` | reviewer |
-| 6 | `pr` | pr |
-| 7 | `tester` | tester; a second pane for a dev server and its logs when a smoke test needs one |
+| 5 | `tester` | tester; a second pane for a dev server and its logs when a smoke test needs one |
+| 6 | `reviewer` | reviewer |
+| 7 | `pr` | pr |
 
 Agent names carry a task prefix (e.g. `rl-coder`) because herdr names are unique across the whole server.
 
@@ -43,7 +43,7 @@ Tabs (numbers assume the harness created them in a fresh workspace; other open t
 
 | Keys | Does |
 |---|---|
-| `ctrl+b` `1` … `7` | jump to lead / architect / tracker / coder / reviewer / pr / tester |
+| `ctrl+b` `1` … `7` | jump to lead / architect / tracker / coder / tester / reviewer / pr |
 | `ctrl+b` `n` / `p` | next / previous tab |
 | `ctrl+b` `g` | go-to picker |
 
@@ -110,9 +110,9 @@ rl-architect          2   idle      design approved
 rl-tracker            3   idle      sub-task 3 In Progress
 rl-coder              4   working   waiting on specialists
   rl-coder-backend    4   working   rate limiter middleware
-rl-reviewer           5   idle      —
-rl-pr                 6   idle      PR #31 open
-rl-tester             7   working   checks + smoke
+rl-tester             5   working   checks + smoke
+rl-reviewer           6   idle      —
+rl-pr                 7   idle      PR #31 open
 decisions  none
 next       tester result, then review
 ```

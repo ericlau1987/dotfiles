@@ -23,9 +23,9 @@ agent                tab  state     doing
 <p>-tracker           3   idle      sub-task 3 In Progress
 <p>-coder             4   working   waiting on specialists
   <p>-coder-backend   4   working   rate limiter middleware
-<p>-reviewer          5   idle      —
-<p>-pr                6   idle      PR #31 open
-<p>-tester            7   working   checks + smoke
+<p>-tester            5   working   checks + smoke
+<p>-reviewer          6   idle      —
+<p>-pr                7   idle      PR #31 open
 decisions  none | <n> waiting for you (see below)
 next       <what happens next, and whether it needs the user>
 ```
@@ -52,7 +52,9 @@ Preflight. **Install skills before starting any agent** (agents only load skills
 Layout. One workspace per repo (the one you are in). Keep your own tab as **`lead`** (`herdr tab rename "$HERDR_TAB_ID" lead`).
    **One tab per agent.** Create these tabs up front, **one at a time, in exactly this order**, so their numbers are stable
    (`ctrl+b 1`…`7`). Then run `herdr tab list --workspace "$HERDR_WORKSPACE_ID"` and check the labels are in this order before
-   starting any agent; if not, close the extra tabs you created and recreate them in order.
+   starting any agent. If the order is wrong (or the workspace already had tabs), move each tab into place with herdr's
+   socket API, which the CLI does not expose: for each tab in order, `printf '{"id":"m","method":"tab.move","params":{"tab_id":"<tab id>","insert_index":<0-based position>}}\n' | nc -U -w 2 ~/.config/herdr/herdr.sock`.
+   List again to confirm. Moving a tab does not affect the agents in it.
    `herdr tab create --workspace "$HERDR_WORKSPACE_ID" --cwd "$PWD" --label <label> --no-focus`, reading each root pane from
    `.result.root_pane.pane_id`. Never move the user's focus off `lead`.
 
@@ -62,9 +64,9 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
    | 2 | `architect` | `<p>-architect` |
    | 3 | `tracker` | `<p>-tracker` |
    | 4 | `coder` | `<p>-coder` (root pane), plus one pane per area specialist (`<p>-coder-<area>`), started for every coded sub-task |
-   | 5 | `reviewer` | `<p>-reviewer` |
-   | 6 | `pr` | `<p>-pr` |
-   | 7 | `tester` | `<p>-tester` (root pane); it splits a second pane itself when a smoke test needs a dev server or logs |
+   | 5 | `tester` | `<p>-tester` (root pane); it splits a second pane itself when a smoke test needs a dev server or logs |
+   | 6 | `reviewer` | `<p>-reviewer` |
+   | 7 | `pr` | `<p>-pr` |
 
    If `DESIGN SKIP` happens, leave the `architect` tab empty rather than renumbering.
 
@@ -109,7 +111,7 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
       Wait for `PR OK <url>`; on `PR ASK`, fix it or ask the user. Then tracker: `update <sub-task URL> review clean, tests pass, PR <url>`.
       Do not commit or push yourself.
    6. **Manual review gate.** Stop and ask the user to review the PR. Show: the PR URL, the Notion sub-task URL,
-      a 3-line summary of the change, what the tester ran, and "the reviewer's notes are in the `reviewer` tab (ctrl+b 5)".
+      a 3-line summary of the change, what the tester ran, and "the reviewer's notes are in the `reviewer` tab (ctrl+b 6)".
       If `herdr notification` can alert the user, send one. Then wait. Do not start the next sub-task until the user answers.
       - **Approved** → tracker: `update <sub-task URL> manual review approved PR <url>`, then the next sub-task.
       - **Changes requested** → tracker: `update <sub-task URL> manual review: <the user's comments>`.
@@ -120,7 +122,7 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
    Never skip tests, review or the manual review gate, and never mark a sub-task done yourself; the tracker sets status.
    If any `--wait` times out or stalls, read the agent before re-sending: a timeout does not prove the prompt was not delivered.
    For long agent replies, ask the agent to write them to a Markdown file and reply with the path.
-5. When everything is done, tell the user the final tracker status, and ask before closing the tabs you created (`architect` to `tester`).
+5. When everything is done, tell the user the final tracker status, and ask before closing the tabs you created (`architect` to `pr`).
 
 # Herdr
 
