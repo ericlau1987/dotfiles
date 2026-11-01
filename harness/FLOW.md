@@ -71,4 +71,4 @@ Stops early and asks you after 3 failed test runs, or 3 review rounds that still
 | reviewer | Replies `REVIEW CLEAN` or `REVIEW FINDINGS` | code-review (built in) | Edits files |
 | pr | Branch, commit, push, PR body with Notion links | deploy-checklist | Force-pushes, merges |
 
-Role files: [roles/](roles/)
+Role files: [roles/](roles/) · Coder subagents: [agents/](agents/)

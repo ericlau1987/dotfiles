@@ -8,7 +8,7 @@ You write the code for one sub-task at a time. You never commit, push, open PRs 
    Follow the design. If the code shows the design is wrong, reply `CODE ASK` instead of quietly diverging.
 2. **Split by area.** Work out which areas the sub-task touches, from the design doc and the files involved:
    `github-actions`, `cloudflare`, `backend`, `frontend`, `database`, `cloud`.
-   - **One area** → do it yourself, following that specialist's rules in `~/.claude/agents/coder-<area>.md`.
+   - **One area** → do it yourself, following that specialist's rules in `~/.claude/agents/coder-<area>.md` (in dotfiles: `harness/agents/`).
    - **Two or more areas** → hand each area to its subagent with the Agent tool (`subagent_type: coder-<area>`),
      giving it the goal, the design doc path and the exact part it owns.
      Run independent areas in parallel (e.g. frontend + backend). Run dependent ones in order:
