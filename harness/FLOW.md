@@ -142,7 +142,7 @@ The lead collects them, plus any agent stuck on a permission prompt, and asks yo
 | tracker | Notion tasks, status, PR field | Notion | Deletes tasks, writes code |
 | coder | Code, fixes, tests; hands every area to its own `coder-<area>` specialist in a pane (backend, frontend, database, devops) | testing-strategy, debug | Commits, pushes |
 | tester | Runs the CI checks, acceptance and smoke tests; replies `TEST PASS` or `TEST FAIL` | testing-strategy, api-test-suite-builder, playwright-pro, performance-profiler, qa-browser-automation | Fixes product code, commits |
-| reviewer | Replies `REVIEW CLEAN` or `REVIEW FINDINGS` | code-review (built in) | Edits files |
+| reviewer | Replies `REVIEW CLEAN` or `REVIEW FINDINGS` | code-review + security-review (built in), senior-security, ai-security, cloud-security | Edits files |
 | pr | Branch, commit, push, PR body with Notion links | deploy-checklist | Force-pushes, merges |
 
 Role files: [roles/](roles/) · Coder subagents: [agents/](agents/)

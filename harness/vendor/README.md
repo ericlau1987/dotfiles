@@ -29,5 +29,8 @@ shell and delete calls before vendoring. Run them from the skill folder: `python
 | performance-profiler | tester |
 | qa-browser-automation | tester (needs Claude in Chrome) |
 | pr-review-expert | reviewer |
+| senior-security | reviewer (secret scan, STRIDE) |
+| ai-security | reviewer (LLM / prompt injection) |
+| cloud-security | reviewer (GCP posture, IAM) |
 
 To update: re-copy the folders from a newer commit, re-run the script check, update the commit above.
