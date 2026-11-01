@@ -119,6 +119,13 @@ decisions  none
 next       tester result, then review
 ```
 
+## CI/CD after merge
+
+After you approve a PR, the pr agent watches it in the background. Once you merge, it watches every CI/CD run on the merge
+commit and reports `CICD PASS` or `CICD FAIL` to the lead. On a failure the lead reads the log, decides the cause and routes it:
+app code → coder and its area specialist; infra, Terraform, Docker or workflows → the devops specialist; flaky → one re-run;
+secrets, permissions, quotas or anything prod → you. The fix goes through the normal loop as a new PR, which is watched too.
+
 ## Decisions
 
 Helpers never ask you directly. They send `ASK` with options and a recommendation to the lead (area specialists go through the coder).

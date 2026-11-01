@@ -26,6 +26,7 @@ agent                tab  state     doing
 <p>-tester            5   working   checks + smoke
 <p>-reviewer          6   idle      —
 <p>-pr                7   idle      PR #31 open
+cicd       PR #31 green · PR #32 watching
 decisions  none | <n> waiting for you (see below)
 next       <what happens next, and whether it needs the user>
 ```
@@ -70,6 +71,7 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
 
    If `DESIGN SKIP` happens, leave the `architect` tab empty rather than renumbering.
 
+   **Your own name:** `herdr agent rename "$HERDR_PANE_ID" <p>-lead`, so the pr agent can report CI/CD results to you.
    **Names.** Pick a short task prefix `<p>` (2–4 lowercase letters from the task, e.g. `rl` for rate limiting) and name agents
    `<p>-architect`, `<p>-tracker`, `<p>-coder`, `<p>-reviewer`, `<p>-pr`. Agent names are unique across the whole herdr server,
    so the prefix keeps two harness runs in different repos from clashing. If a name is taken, pick another prefix.
@@ -115,7 +117,8 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
    6. **Manual review gate.** Stop and ask the user to review the PR. Show: the PR URL, the Notion sub-task URL,
       a 3-line summary of the change, what the tester ran, and "the reviewer's notes are in the `reviewer` tab (ctrl+b 6)".
       If `herdr notification` can alert the user, send one. Then wait. Do not start the next sub-task until the user answers.
-      - **Approved** → tracker: `update <sub-task URL> manual review approved PR <url>`, then the next sub-task.
+      - **Approved** → tracker: `update <sub-task URL> manual review approved PR <url>`; pr agent: `watch <PR url>`; then the
+        next sub-task. The user merges; the pr agent watches the merge and its CI/CD in the background (see CI/CD below).
       - **Changes requested** → tracker: `update <sub-task URL> manual review: <the user's comments>`.
         Treat the comments as findings: coder `fix <the user's comments>` → test → review → pr agent `ship` (updates the same PR) → this gate again.
       Approval does not mean merge. Never merge unless the user says so.
@@ -124,6 +127,19 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
    Never skip tests, review or the manual review gate, and never mark a sub-task done yourself; the tracker sets status.
    If any `--wait` times out or stalls, read the agent before re-sending: a timeout does not prove the prompt was not delivered.
    For long agent replies, ask the agent to write them to a Markdown file and reply with the path.
+**CI/CD after merge.** Messages that arrive in your input starting with `CICD` come from the pr agent, not the user.
+   - `CICD PASS` → tracker: `update <sub-task URL> merged, CI/CD green: <runs>`; show it on the status board (`cicd` line).
+   - `CICD FAIL` → **analyse first**: read the failed log (`gh run view <id> --log-failed`) and the merged diff, then classify:
+     | Cause | Who works on it |
+     |---|---|
+     | app code or tests (backend, frontend, database) | coder → its area specialist, then tester → reviewer → pr |
+     | infra, Terraform, Docker, workflow YAML, deploy config | coder → `devops` specialist, then tester → reviewer → pr |
+     | flaky or transient (network, rate limit, runner) on CI or dev | re-run once yourself (`gh run rerun <id> --failed`) and watch again; a second failure is real |
+     | secrets, permissions, quotas, expired credentials, anything prod | the user: add it to the "Decisions needed" batch |
+     Tracker: `update <sub-task URL> CI/CD failed after merge: <cause>` (status back to In Progress). Then run the normal loop on
+     a new branch for the fix (code → test → review → pr → the user's PR gate), and `watch` the fix PR too.
+   - `CICD TIMEOUT` or `SKIPPED` → tell the user in the next status board; do not act on it.
+   Status board: add a line `cicd       <PR>: watching | green | FAILED → <who is fixing>` while any watch is open.
 5. When everything is done, tell the user the final tracker status, and ask before closing the tabs you created (`architect` to `pr`).
 
 # Herdr

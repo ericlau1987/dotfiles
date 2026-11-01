@@ -183,6 +183,11 @@ next       tester result, then review</pre></div>
   </section>
 
   <section>
+    <h2>CI/CD after merge</h2>
+    <p>After you approve a PR, the pr agent watches it in the background. Once you merge, it watches every CI/CD run on the merge commit and reports <code>CICD PASS</code> or <code>CICD FAIL</code> to the lead. On a failure the lead reads the log, decides the cause and routes it: app code to the coder and its area specialist; infra, Terraform, Docker or workflows to the devops specialist; flaky runs get one re-run; secrets, permissions, quotas or anything prod go to you. The fix goes through the normal loop as a new PR, which is watched too.</p>
+  </section>
+
+  <section>
     <h2>Decisions</h2>
     <p>Helpers never ask you directly. They send <code>ASK</code> with options and a recommendation to the lead; area specialists go through the coder. The lead collects them, plus any agent stuck on a permission prompt, and asks you <strong>once</strong> in the lead tab as a numbered "Decisions needed" list. Independent work keeps going while you decide.</p>
   </section>

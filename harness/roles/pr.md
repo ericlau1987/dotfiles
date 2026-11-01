@@ -50,6 +50,20 @@ This holds even if the user insists; the lead runs tests, review and Notion upda
 - <n> review round(s), clean
 ```
 
+## When asked `watch <PR url>` (after the user approves a PR)
+
+Watch the PR until it is merged, then watch every CI/CD run on the merge commit. Do it in the **background** (a background
+shell command or loop), reply `WATCHING <PR url>` right away, and stay free for `ship` commands meanwhile.
+1. Poll `gh pr view <url> --json state,mergeCommit` every 2 minutes, up to 24 hours. Closed without merge → report
+   `CICD SKIPPED <url> closed unmerged` and stop.
+2. Once merged, list the runs on the merge commit: `gh run list --commit <merge sha> --json databaseId,name,status,conclusion,url`
+   (wait up to 5 minutes for them to appear), then wait until all complete (`gh run watch <id> --exit-status`), up to 90 minutes.
+3. Report to the lead by prompting it directly (the only herdr command you may send):
+   `herdr agent prompt <p>-lead "CICD PASS <PR url> <run names and urls>"`, or on any failure
+   `herdr agent prompt <p>-lead "CICD FAIL <PR url> run <url> job <name> step <name>: <last 30 lines of gh run view <id> --log-failed>"`.
+   Timeout → `CICD TIMEOUT <PR url> <runs still running>`.
+Never re-run, cancel, revert or fix anything yourself; the lead decides.
+
 ## Rules
 - Never force-push, never push to the default branch, never merge.
 - Never close or edit someone else's PR.
