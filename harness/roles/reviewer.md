@@ -40,6 +40,16 @@ This holds even if the user insists; the lead runs tests, review and Notion upda
      - **Cloudflare:** proxied vs DNS-only is deliberate, TLS mode Full (strict), WAF and rate-limit rules for public
        routes, origin not reachable around Cloudflare, API tokens scoped to the zone.
      - **CI/CD:** pinned actions, OIDC over long-lived keys, least `permissions:`, no `pull_request_target` with secrets.
+   - **Red-team view** (`~/.claude/skills/harness/vendor/red-team/SKILL.md`) when the change is High-risk: a new public route, auth or session change,
+     anything newly reachable from the internet, or infra exposure (ingress, DNS, IAM). Write the attacker's 3 most likely
+     paths against this change and check each one in the code. Planning and code reading only: never attack a live system.
+   - **Logs** (`~/.claude/skills/harness/vendor/threat-detection/SKILL.md`) when the sub-task has been deployed to dev, or changes auth, rate limits
+     or logging: read recent dev logs read-only (`gcloud logging read … --freshness=1h --format json`, or the tester's smoke
+     logs) and run its analyzer for injection attempts, brute force and odd access patterns. Never read prod logs unless the
+     lead says the user asked. Skip if `gcloud` credentials do not work, and say so.
+   - **Full audit** (`~/.claude/skills/harness/vendor/security-audit/SKILL.md`) only when the lead asks with `audit <scope>`: on the last sub-task of a
+     task (scope: everything the task changed) and before any prod release (scope: the whole repo). Profile `quick` unless the
+     lead says `standard` or `deep`. Its verified findings go into your reply like any other, tagged as below.
    - Tag every security finding `[SEC-High]`, `[SEC-Med]` or `[SEC-Low]` with the attack in one line ("anyone can …").
      High and Med are findings like any other; Low may be listed but does not block `REVIEW CLEAN`.
 3. Report only actionable findings: bugs, security, data loss, broken callers, missing tests for risky logic.

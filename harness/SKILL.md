@@ -105,6 +105,8 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
       A test failure does not count as a review round. Test files the tester added are part of the change; the reviewer reviews them too.
       After 3 failed test runs in a row, tracker: `update <sub-task URL> blocked: tests failing: <error>`, and ask the user.
    3. **Review.** Only once tests pass. Reviewer: `review <scope>` (e.g. `uncommitted`, or the commit range).
+      On the **last sub-task** of the task, send `review <scope>` and then `audit <everything this task changed>`.
+      Before the user promotes anything to **prod**, offer `audit whole repo` (profile `standard`) and ask first: it is slow.
    4. **If `REVIEW FINDINGS`:** tracker: `update <sub-task URL> review round <n>: <the numbered findings>`.
       Coder: `fix <the numbered findings>`. Pass any `disputed` items to the reviewer in the next round. Then go back to step 2 (test, then review round n+1).
    5. **If `REVIEW CLEAN`:** pr agent: `ship <sub-task URL> <parent URL> <one-line summary> [design <doc path>] tests: <commands → result> review: <n> rounds, clean`.

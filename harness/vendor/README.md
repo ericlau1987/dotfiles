@@ -32,5 +32,8 @@ shell and delete calls before vendoring. Run them from the skill folder: `python
 | senior-security | reviewer (secret scan, STRIDE) |
 | ai-security | reviewer (LLM / prompt injection) |
 | cloud-security | reviewer (GCP posture, IAM) |
+| red-team | reviewer (attack paths for high-risk changes) |
+| threat-detection | reviewer (dev log analysis after deploy) |
+| security-audit | reviewer (full audit on the last sub-task and before prod) |
 
 To update: re-copy the folders from a newer commit, re-run the script check, update the commit above.
