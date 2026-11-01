@@ -13,6 +13,7 @@ When the user starts a task with `/harness`, run this flow on top of the Herdr r
 2. **Reviewer second.** Split a pane and start a `claude` agent named `reviewer`. Prompt it once:
    `Read ~/.claude/skills/harness/roles/reviewer.md and follow it. Reply READY.`
    Keep this one reviewer for the whole task so it remembers earlier rounds.
+   Then start a `claude` agent named `pr` the same way with `roles/pr.md`. It is the only one that commits, pushes and opens PRs.
 3. **Find the checks once.** Read the repo's CI (`.github/workflows/*.yml`) and scripts (`package.json`, `pyproject.toml`,
    `justfile`, `Makefile`) and list the commands CI runs: lint, typecheck, test, build. Run only those for the parts
    the sub-task touches. Split a pane named for running them (a plain shell, not an agent), and reuse it.
@@ -24,7 +25,9 @@ When the user starts a task with `/harness`, run this flow on top of the Herdr r
    3. **Review.** Only once tests pass. Reviewer: `review <scope>` (e.g. `uncommitted`, or the commit range).
    4. **If `REVIEW FINDINGS`:** tracker: `update <sub-task URL> review round <n>: <the numbered findings>`.
       Fix every finding, then go back to step 2 (test, then review round n+1).
-   5. **If `REVIEW CLEAN`:** commit, push, open or update the PR. Tracker: `update <sub-task URL> review clean, tests pass, PR <url>`.
+   5. **If `REVIEW CLEAN`:** pr agent: `ship <sub-task URL> <parent URL> <one-line summary> tests: <commands → result> review: <n> rounds, clean`.
+      Wait for `PR OK <url>`; on `PR ASK`, fix it or ask the user. Then tracker: `update <sub-task URL> review clean, tests pass, PR <url>`.
+      Do not commit or push yourself.
    6. **Stop after 3 review rounds** that still have findings. Tracker: `update <sub-task URL> blocked after 3 review rounds: <open findings>`,
       then show the user the open findings and ask how to proceed. Do not start the next sub-task.
    Never skip tests or review, and never mark a sub-task done yourself; the tracker sets status.
