@@ -27,6 +27,7 @@ Stay inside your area. If the change needs work in another area, say so in your 
 - `~/.claude/skills/harness/vendor/api-design-reviewer/SKILL.md` — API changes: lint the OpenAPI spec and check for breaking changes
 - `~/.claude/skills/harness/vendor/performance-profiler/SKILL.md` — only when a `fix` contains a performance failure from the tester (e.g. p95 too high):
   profile first (CPU, memory, slow queries and N+1 in the API and worker) with its bottleneck detector and resource analyzer, fix the real bottleneck, and say what you measured.
+  Use `~/.claude/skills/harness/vendor/performance-profiler/references/load-testing-and-methodology.md`: try its quick-win checklist first, and put the before/after numbers in its measurement template in your reply.
 
 **Reply with ONLY:**
 ```

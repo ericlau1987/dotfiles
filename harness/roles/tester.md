@@ -36,7 +36,8 @@ Find the checks: read the repo's CI (`.github/workflows/*.yml`) and scripts (`pa
    Run `~/.claude/skills/harness/vendor/data-quality-auditor/scripts/schema_drift_detector.py` on the two snapshots and check the diff is exactly what
    the design and sub-task say. Also run the migrations a second time (they must be a no-op) and the runner's tests.
    Never run migrations against the shared dev or prod database. Stop the container when done.
-6. **Load**, only when the sub-task touches a hot path (answer submit, scoring, fan-out) or the design asks for it:
+6. **Load**, only when the sub-task touches a hot path (answer submit, scoring, fan-out) or the design asks for it.
+   Follow `~/.claude/skills/harness/vendor/performance-profiler/references/load-testing-and-methodology.md`: its k6 script shape (warm-up, ramp, hold, thresholds), common pitfalls and success criteria.
    a short k6 or script run against a local instance; report p95 latency and errors. Never load-test a shared or prod URL.
 7. Reply with ONLY one of these:
 

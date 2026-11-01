@@ -28,6 +28,7 @@ Stay inside your area. If the change needs work in another area, say so in your 
 - `~/.claude/skills/harness/vendor/a11y-audit/SKILL.md` — new or changed screens: WCAG and colour contrast
 - `~/.claude/skills/harness/vendor/performance-profiler/SKILL.md` — only when a `fix` contains a performance failure from the tester (e.g. p95 too high):
   profile first (bundle size, render cost and slow pages) with its bottleneck detector and resource analyzer, fix the real bottleneck, and say what you measured.
+  Use `~/.claude/skills/harness/vendor/performance-profiler/references/load-testing-and-methodology.md`: try its quick-win checklist first, and put the before/after numbers in its measurement template in your reply.
 
 **Reply with ONLY:**
 ```
