@@ -13,6 +13,7 @@ link() { # link <repo path> <target>
 link herdr/config.toml ~/.config/herdr/config.toml
 link nvim              ~/.config/nvim
 link harness           ~/.claude/skills/harness
+link claude-agents     ~/.claude/agents
 
 if command -v claude >/dev/null; then
   claude plugin list 2>/dev/null | grep -q engineering@knowledge-work-plugins || {
