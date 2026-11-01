@@ -40,6 +40,7 @@ td:first-child { font: 500 14px var(--mono); color: var(--accent); white-space: 
 .gate { background: var(--gate-bg); border-left: 3px solid var(--gate); border-radius: 4px; padding: 12px 14px; min-width: 0; }
 .gate b { display: block; color: var(--gate); font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; }
 .gate span { font-size: 15px; }
+h3.sub { font: 600 13px/1.4 var(--body); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 20px 0 8px; }
 footer { font-size: 13px; color: var(--muted); }
 </style>
 
@@ -83,6 +84,45 @@ flowchart TB
       </table>
     </div>
     <p class="note">Agent names carry a task prefix such as <code>rl-coder</code>, because herdr names are unique across the whole server.</p>
+  </section>
+
+  <section>
+    <h2>Keys</h2>
+    <p>Terminal herdr, prefix <code>ctrl+b</code>. Tab numbers assume the harness created its tabs in a fresh workspace; other open tabs shift them. <code>ctrl+b ?</code> shows every key.</p>
+    <h3 class="sub">Tabs</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Keys</th><th>Does</th></tr></thead>
+        <tbody>
+          <tr><td>ctrl+b 1 / 2 / 3 / 4</td><td>Jump to lead / agents / checks / review</td></tr>
+          <tr><td>ctrl+b n / p</td><td>Next / previous tab</td></tr>
+          <tr><td>ctrl+b g</td><td>Go-to picker</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 class="sub">Panes</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Keys</th><th>Does</th></tr></thead>
+        <tbody>
+          <tr><td>ctrl+b h / j / k / l</td><td>Move left / down / up / right</td></tr>
+          <tr><td>ctrl+b tab</td><td>Cycle panes</td></tr>
+          <tr><td>ctrl+b z</td><td>Zoom one pane full screen; press again to restore</td></tr>
+          <tr><td>ctrl+b x</td><td>Close pane (ends what is running in it)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 class="sub">nvim sidebar</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Keys</th><th>Does</th></tr></thead>
+        <tbody>
+          <tr><td>ctrl+b e</td><td>Open or close the nvim sidebar</td></tr>
+          <tr><td>ctrl+b shift+o</td><td>Pick a file the agent touched</td></tr>
+          <tr><td>ctrl+b shift+e</td><td>herdr edit scrollback (moved off e)</td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
   <section>
