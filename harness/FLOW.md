@@ -67,7 +67,7 @@ Stops early and asks you after 3 failed test runs, or 3 review rounds that still
 | lead | Coordinates, runs checks, talks to you | harness ([SKILL.md](SKILL.md)) | Writes code, commits, edits Notion |
 | architect | Design doc in `docs/design/` | system-design, architecture | Writes code or Notion |
 | tracker | Notion tasks, status, PR field | Notion | Deletes tasks, writes code |
-| coder | Code, fixes, tests; splits multi-area work across `coder-<area>` subagents (cloudflare, backend, frontend, database, cloud, devops) | testing-strategy, debug | Commits, pushes |
+| coder | Code, fixes, tests; splits multi-area work across `coder-<area>` subagents (backend, frontend, database, devops) | testing-strategy, debug | Commits, pushes |
 | reviewer | Replies `REVIEW CLEAN` or `REVIEW FINDINGS` | code-review (built in) | Edits files |
 | pr | Branch, commit, push, PR body with Notion links | deploy-checklist | Force-pushes, merges |
 

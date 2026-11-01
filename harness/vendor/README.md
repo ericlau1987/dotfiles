@@ -9,7 +9,7 @@ shell and delete calls before vendoring. Run them from the skill folder: `python
 
 | Skill | Used by |
 |---|---|
-| gcp-cloud-architect | architect, coder-cloud |
+| gcp-cloud-architect | architect, coder-devops |
 | migration-architect | architect, coder-database |
 | observability-designer | architect |
 | senior-frontend | coder-frontend |

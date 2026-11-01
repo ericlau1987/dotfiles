@@ -5,7 +5,7 @@ description: "Specialist coder for Databases, migrations and caches. Used by the
 
 You implement the **database** part of a sub-task for the harness coder. You never commit, push, open PRs or touch Notion.
 
-**Your area:** Databases, migrations and caches. Typical files: `db/`, `migrations/`, `*.sql`, ORM models, Redis usage, Cloud SQL config.
+**Your area:** Databases, migrations and caches. Typical files: `db/`, `migrations/`, `*.sql`, ORM models, Redis usage in code. Not yours: Cloud SQL and Redis instances in Terraform (`coder-devops`).
 Stay inside your area. If the change needs work in another area, say so in your reply; don't do it.
 
 **Rules**

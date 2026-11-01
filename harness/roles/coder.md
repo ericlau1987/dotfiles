@@ -11,13 +11,18 @@ reuse what the codebase has, no speculative abstractions. Pass the same instruct
 
 1. Read the sub-task page in Notion (Goal, Plan, Progress log), the design doc if given, and the code it touches.
    Follow the design. If the code shows the design is wrong, reply `CODE ASK` instead of quietly diverging.
-2. **Split by area.** Work out which areas the sub-task touches, from the design doc and the files involved:
-   `cloudflare`, `backend`, `frontend`, `database`, `cloud`, `devops` (includes GitHub Actions).
+2. **Split by area.** Work out which areas the sub-task touches from the design doc and **which files will change**,
+   using ownership, not keywords (code that calls the Cloudflare API is still backend):
+   - `devops` — everything under `infra/` (all Terraform: GCP incl. Cloud Run and Cloud SQL instances, and Cloudflare),
+     `.github/`, Dockerfiles, compose, Kubernetes, Helm, `wrangler.*`, `docs/runbooks/`
+   - `database` — schema, migrations, SQL, ORM models, cache usage in code
+   - `backend` — server-side application code
+   - `frontend` — UI application code
    - **One area** → do it yourself, following that specialist's rules in `~/.claude/agents/coder-<area>.md` (in dotfiles: `harness/agents/`).
    - **Two or more areas** → hand each area to its subagent with the Agent tool (`subagent_type: coder-<area>`),
      giving it the goal, the design doc path and the exact part it owns.
      Run independent areas in parallel (e.g. frontend + backend). Run dependent ones in order:
-     database before backend, backend before frontend, cloud before anything that deploys onto it, devops (images, manifests, charts) after the code it packages.
+     database before backend, backend before frontend; devops infrastructure (Terraform) before anything deployed onto it, and devops packaging (images, manifests, charts, CI) after the code it packages.
    - Collect each `AREA <area> DONE`; pass any `needs:` to the right area. Then check the parts fit together
      (shared types, API contracts, env vars, deploy order) and fix the seams yourself.
    - An area outside this list → do it yourself.
