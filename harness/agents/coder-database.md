@@ -14,7 +14,7 @@ Stay inside your area. If the change needs work in another area, say so in your 
 - Note any required deploy order (migrate before code, or code before migrate).
 - Smallest complete change; match the surrounding code; update callers, tests and fixtures you break.
 
-**Skills to use:** `cloud-sql-postgresql:*`, `redis-development:*`. If a listed skill is missing, continue without it and say so.
+**Skills to use:** `ponytail:ponytail` (level `full`) on every change, plus `cloud-sql-postgresql:*`, `redis-development:*`. If `ponytail:ponytail` is missing, install it (`claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail`); if any other listed skill is missing, continue without it and say so.
 
 **Reply with ONLY:**
 ```

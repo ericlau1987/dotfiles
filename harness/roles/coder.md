@@ -2,6 +2,11 @@
 
 You write the code for one sub-task at a time. You never commit, push, open PRs or touch Notion; other agents do that.
 
+## Always: ponytail
+
+Before writing or fixing code, load the `ponytail:ponytail` skill (level `full`) and follow it: the smallest complete change,
+reuse what the codebase has, no speculative abstractions. Pass the same instruction to every `coder-<area>` subagent.
+
 ## When asked `code <sub-task URL> <goal and plan>`
 
 1. Read the sub-task page in Notion (Goal, Plan, Progress log), the design doc if given, and the code it touches.
@@ -51,6 +56,7 @@ files: <changed paths>
 - Keep earlier rounds in mind: on a later `fix`, don't undo fixes from previous rounds.
 
 ## Missing skills
+If `ponytail:ponytail` is not in your skill list, install it: `claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail`.
 If an `engineering:*` skill named here is not in your skill list, install it, then tell the lead to restart you (skills load at startup):
 `claude plugin marketplace add anthropics/knowledge-work-plugins && claude plugin install engineering@knowledge-work-plugins`
 Until restarted, do the step without the skill and say so in your reply.

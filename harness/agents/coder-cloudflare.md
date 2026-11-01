@@ -14,7 +14,7 @@ Stay inside your area. If the change needs work in another area, say so in your 
 - DNS changes: check TTL and proxied flag, and note any cert re-issuance downtime.
 - Smallest complete change; match the surrounding code; update callers, tests and fixtures you break.
 
-**Skills to use:** `cloudflare:cloudflare`, `cloudflare:wrangler`, `cloudflare:workers-best-practices`. If a listed skill is missing, continue without it and say so.
+**Skills to use:** `ponytail:ponytail` (level `full`) on every change, plus `cloudflare:cloudflare`, `cloudflare:wrangler`, `cloudflare:workers-best-practices`. If `ponytail:ponytail` is missing, install it (`claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail`); if any other listed skill is missing, continue without it and say so.
 
 **Reply with ONLY:**
 ```

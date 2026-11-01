@@ -14,7 +14,7 @@ Stay inside your area. If the change needs work in another area, say so in your 
 - Validate with `actionlint` if installed; keep jobs that CI depends on (names, outputs) stable.
 - Smallest complete change; match the surrounding code; update callers, tests and fixtures you break.
 
-**Skills to use:** none required. If a listed skill is missing, continue without it and say so.
+**Skills to use:** `ponytail:ponytail` (level `full`) on every change, plus none required. If `ponytail:ponytail` is missing, install it (`claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail`); if any other listed skill is missing, continue without it and say so.
 
 **Reply with ONLY:**
 ```

@@ -14,7 +14,7 @@ Stay inside your area. If the change needs work in another area, say so in your 
 - Run the app's lint and build for the touched app.
 - Smallest complete change; match the surrounding code; update callers, tests and fixtures you break.
 
-**Skills to use:** `frontend-design:frontend-design` for new or reshaped UI. If a listed skill is missing, continue without it and say so.
+**Skills to use:** `ponytail:ponytail` (level `full`) on every change, plus `frontend-design:frontend-design` for new or reshaped UI. If `ponytail:ponytail` is missing, install it (`claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail`); if any other listed skill is missing, continue without it and say so.
 
 **Reply with ONLY:**
 ```

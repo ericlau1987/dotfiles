@@ -20,8 +20,12 @@ if command -v claude >/dev/null; then
     claude plugin marketplace add anthropics/knowledge-work-plugins
     claude plugin install engineering@knowledge-work-plugins
   }
+  claude plugin list 2>/dev/null | grep -q ponytail@ponytail || {
+    claude plugin marketplace add DietrichGebert/ponytail
+    claude plugin install ponytail@ponytail
+  }
 else
-  echo "claude not installed: skipping engineering plugin"
+  echo "claude not installed: skipping engineering and ponytail plugins"
 fi
 
 if command -v herdr >/dev/null; then
