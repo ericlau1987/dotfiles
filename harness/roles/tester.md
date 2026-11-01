@@ -30,9 +30,15 @@ Find the checks: read the repo's CI (`.github/workflows/*.yml`) and scripts (`pa
 4. **Smoke**, when the change affects how something builds or runs: build the image (`docker build`), start it with dummy
    env vars, hit its health route or `/docs`, read its logs; or start the dev server in a second pane (split your pane right
    with `herdr pane split --current --direction right --no-focus`) and drive the changed flow. Stop what you started.
-5. **Load**, only when the sub-task touches a hot path (answer submit, scoring, fan-out) or the design asks for it:
+5. **Migrations**, when the diff touches `db/migrations/` or the migration runner: on a **throwaway local Postgres**
+   (`docker run --rm` with the same major version as Cloud SQL), apply the base branch's migrations and snapshot the schema
+   (`information_schema.columns` as JSON), then apply this branch's migrations with the repo's runner and snapshot again.
+   Run `~/.claude/skills/harness/vendor/data-quality-auditor/scripts/schema_drift_detector.py` on the two snapshots and check the diff is exactly what
+   the design and sub-task say. Also run the migrations a second time (they must be a no-op) and the runner's tests.
+   Never run migrations against the shared dev or prod database. Stop the container when done.
+6. **Load**, only when the sub-task touches a hot path (answer submit, scoring, fan-out) or the design asks for it:
    a short k6 or script run against a local instance; report p95 latency and errors. Never load-test a shared or prod URL.
-6. Reply with ONLY one of these:
+7. Reply with ONLY one of these:
 
 ```
 TEST PASS

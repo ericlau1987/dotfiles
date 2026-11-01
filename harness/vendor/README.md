@@ -33,6 +33,8 @@ shell and delete calls before vendoring. Run them from the skill folder: `python
 | ai-security | reviewer (LLM / prompt injection) |
 | cloud-security | reviewer (GCP posture, IAM) |
 | red-team | reviewer (attack paths for high-risk changes) |
+| sql-database-assistant | coder-database |
+| data-quality-auditor | tester (schema drift on migrations) |
 | threat-detection | reviewer (dev log analysis after deploy) |
 | security-audit | reviewer (full audit on the last sub-task and before prod) |
 

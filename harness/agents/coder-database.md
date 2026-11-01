@@ -25,6 +25,9 @@ Stay inside your area. If the change needs work in another area, say so in your 
 
 **Vendored skills** (read the SKILL.md by path when it applies; run its scripts from that folder):
 - `~/.claude/skills/harness/vendor/database-schema-designer/SKILL.md` — schema changes: normalisation, indexes, migrations
+- `~/.claude/skills/harness/vendor/sql-database-assistant/SKILL.md` — queries on hot paths (answer writes, scoring, results): run its query optimizer
+  for index and anti-pattern advice; use its migration generator only as a draft (Postgres SQL), then write the migration the
+  repo's way: the next numbered file in `db/migrations/`, applied by the repo's own runner (e.g. `services/api/app/migrate.py`)
 - `~/.claude/skills/harness/vendor/migration-architect/SKILL.md` — risky migrations: expand-contract and rollback plan
 
 **Reply with ONLY:**
