@@ -1,0 +1,135 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harness Agent Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600&display=swap">
+<style>
+/* Layout: one reading column; diagrams and tables scroll inside their own frames */
+:root {
+  --bg: #f6f7f5; --surface: #ffffff; --fg: #1d2420; --muted: #5d6a62;
+  --line: #d9dfda; --accent: #2f6b4f; --gate: #b5621b; --gate-bg: #fbf0e4;
+  --display: "Fraunces", Georgia, serif;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141917; --surface: #1c2320; --fg: #e3e9e5; --muted: #9aa8a0;
+  --line: #2f3a35; --accent: #7cc4a0; --gate: #e9a35f; --gate-bg: #2e2419; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #141917; --surface: #1c2320; --fg: #e3e9e5; --muted: #9aa8a0;
+  --line: #2f3a35; --accent: #7cc4a0; --gate: #e9a35f; --gate-bg: #2e2419; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 16px/1.6 var(--body); padding-inline: 16px; padding-block: 40px 64px; }
+main { max-width: 920px; margin: 0 auto; display: grid; gap: 40px; }
+h1 { font: 600 clamp(28px, 5vw, 40px)/1.15 var(--display); margin: 0; text-wrap: balance; }
+h2 { font: 600 22px/1.3 var(--display); margin: 0 0 12px; text-wrap: balance; }
+.lede { color: var(--muted); max-width: 65ch; margin: 8px 0 0; }
+p { max-width: 65ch; margin: 0 0 12px; }
+code { font: 0.9em var(--mono); background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+.frame { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; overflow-x: auto; }
+.frame pre.mermaid { margin: 0; min-width: 640px; text-align: center; }
+.note { font-size: 14px; color: var(--muted); margin-top: 8px; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 15px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font: 500 14px var(--mono); color: var(--accent); white-space: nowrap; }
+.gates { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.gate { background: var(--gate-bg); border-left: 3px solid var(--gate); border-radius: 4px; padding: 12px 14px; min-width: 0; }
+.gate b { display: block; color: var(--gate); font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; }
+.gate span { font-size: 15px; }
+footer { font-size: 13px; color: var(--muted); }
+</style>
+
+<main>
+  <header>
+    <h1>Harness agent flow</h1>
+    <p class="lede">How <code>/harness &lt;task&gt;</code> runs in herdr: one lead agent coordinates five helper agents, from design doc to an approved pull request for every sub-task.</p>
+  </header>
+
+  <section>
+    <h2>Who talks to whom</h2>
+    <p>Helpers never talk to each other. Every message goes through the lead, which runs <code>herdr agent prompt</code> and <code>herdr agent read</code>.</p>
+    <div class="frame">
+<pre class="mermaid">
+flowchart TB
+  YOU(["You"])
+  LEAD["LEAD<br/>preflight · runs checks · decides next step"]
+  YOU <-->|"/harness · design gate · PR gate"| LEAD
+  LEAD --> ARCH["architect"] --> D[("docs/design/")]
+  LEAD --> TRK["tracker"] --> N[("Notion Task Board")]
+  LEAD --> COD["coder"] --> C[("code")]
+  LEAD --> REV["reviewer"] --> R[("reads diff")]
+  LEAD --> PR["pr"] --> G[("GitHub PR")]
+  LEAD --> CHK["checks pane<br/>lint · test · build"]
+</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>The whole flow</h2>
+    <div class="frame">
+<pre class="mermaid">
+flowchart TD
+  START(["You: /harness task"]) --> PRE{"LEAD: engineering<br/>plugin installed?"}
+  PRE -->|no| INST["LEAD installs it"] --> A
+  PRE -->|yes| A["LEAD → architect: design<br/>prior art · 2–3 approaches · recommendation"]
+  A -->|DESIGN SKIP| T
+  A -->|DESIGN READY| DG{{"⏸ You: design gate"}}
+  DG -->|comments / go with B| REVISE["LEAD → architect: revise"] --> DG
+  DG -->|approved| T["LEAD → tracker: plan<br/>Notion parent tasks + sub-tasks"]
+  T --> SETUP["LEAD starts coder, reviewer, pr<br/>reads CI · opens checks pane"]
+  SETUP --> CODE
+
+  subgraph LOOP["For each sub-task"]
+    CODE["LEAD → coder: code<br/>tracker: started → In Progress"] --> TEST{"LEAD runs checks"}
+    TEST -->|fail| FIXT["LEAD → coder: fix attempt n<br/>/debug from n ≥ 2"] --> TEST
+    TEST -->|pass| RV{"LEAD → reviewer<br/>/code-review high"}
+    RV -->|FINDINGS| FIXR["LEAD → tracker: log round<br/>LEAD → coder: fix"] --> TEST
+    RV -->|CLEAN| SHIP["LEAD → pr: ship<br/>branch · commit · push · PR with Notion links"]
+    SHIP --> TL["LEAD → tracker: PR field<br/>status → Review"]
+    TL --> PG{{"⏸ You: PR gate"}}
+    PG -->|changes| FIXP["LEAD → tracker: log comments<br/>LEAD → coder: fix"] --> TEST
+  end
+
+  PG -->|approved, more sub-tasks| CODE
+  PG -->|approved, last one| END(["LEAD reports final status<br/>never merges unless you say so"])
+</pre>
+    </div>
+    <p class="note">Stops early and asks you after 3 failed test runs or 3 review rounds that still have findings.</p>
+  </section>
+
+  <section>
+    <h2>Where you step in</h2>
+    <div class="gates">
+      <div class="gate"><b>Design gate</b><span>Approve, comment, or pick another approach ("go with B").</span></div>
+      <div class="gate"><b>PR gate</b><span>Once per sub-task. Approve, or request changes and the same PR is updated.</span></div>
+      <div class="gate"><b>Stuck</b><span>3 failed test runs, or 3 review rounds still finding issues.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The agents</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Agent</th><th>Job</th><th>Skills</th><th>Never</th></tr></thead>
+        <tbody>
+          <tr><td>lead</td><td>Coordinates, runs checks, talks to you</td><td>harness</td><td>Writes code, commits, edits Notion</td></tr>
+          <tr><td>architect</td><td>Design doc in <code>docs/design/</code></td><td>system-design, architecture</td><td>Writes code or Notion</td></tr>
+          <tr><td>tracker</td><td>Notion tasks, status, PR field</td><td>Notion</td><td>Deletes tasks, writes code</td></tr>
+          <tr><td>coder</td><td>Code, fixes, tests</td><td>testing-strategy, debug</td><td>Commits, pushes</td></tr>
+          <tr><td>reviewer</td><td>Replies REVIEW CLEAN or FINDINGS</td><td>code-review (built in)</td><td>Edits files</td></tr>
+          <tr><td>pr</td><td>Branch, commit, push, PR body with Notion links</td><td>deploy-checklist</td><td>Force-pushes, merges</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>Live page: https://claude.ai/artifact/CLW9mE2AZSM3ZagBQh2ojj · Source: <code>~/dotfiles/harness/</code> (SKILL.md and roles/*.md), github.com/ericlau1987/dotfiles at commit 32bee3f.</footer>
+</main>
+
+<!-- mermaid renders natively on claude.ai; this loads it when the file is opened locally -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default" });</script>
