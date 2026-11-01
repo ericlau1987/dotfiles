@@ -28,9 +28,16 @@ When the user starts a task with `/harness`, run this flow on top of the Herdr r
    5. **If `REVIEW CLEAN`:** pr agent: `ship <sub-task URL> <parent URL> <one-line summary> tests: <commands → result> review: <n> rounds, clean`.
       Wait for `PR OK <url>`; on `PR ASK`, fix it or ask the user. Then tracker: `update <sub-task URL> review clean, tests pass, PR <url>`.
       Do not commit or push yourself.
-   6. **Stop after 3 review rounds** that still have findings. Tracker: `update <sub-task URL> blocked after 3 review rounds: <open findings>`,
+   6. **Manual review gate.** Stop and ask the user to review the PR. Show: the PR URL, the Notion sub-task URL,
+      a 3-line summary of the change, and what checks ran. If `herdr notification` can alert the user, send one.
+      Then wait. Do not start the next sub-task until the user answers.
+      - **Approved** → tracker: `update <sub-task URL> manual review approved PR <url>`, then the next sub-task.
+      - **Changes requested** → tracker: `update <sub-task URL> manual review: <the user's comments>`.
+        Treat the comments as findings: fix → test → review → pr agent `ship` (updates the same PR) → this gate again.
+      Approval does not mean merge. Never merge unless the user says so.
+   7. **Stop after 3 review rounds** that still have findings. Tracker: `update <sub-task URL> blocked after 3 review rounds: <open findings>`,
       then show the user the open findings and ask how to proceed. Do not start the next sub-task.
-   Never skip tests or review, and never mark a sub-task done yourself; the tracker sets status.
+   Never skip tests, review or the manual review gate, and never mark a sub-task done yourself; the tracker sets status.
 5. When everything is done, tell the user the final tracker status, and ask before closing panes you created.
 
 # Herdr
