@@ -1,6 +1,7 @@
 ---
 name: harness
-description: "Control Herdr, a terminal multiplexer for coding agents. Use only when the user explicitly mentions Herdr or asks to use Herdr to inspect or control panes, tabs, workspaces, commands, or another agent. Do not use merely because a task could benefit from a background terminal, delegation, or parallel work. Requires HERDR_ENV=1."
+description: "Multi-agent harness in herdr: architect, tracker, coder (with area specialists), reviewer and pr agents, each in its own tab, with design and PR gates. Run with /harness <task>."
+disable-model-invocation: true
 ---
 
 # Harness flow
