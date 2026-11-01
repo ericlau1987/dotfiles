@@ -40,6 +40,7 @@ td:first-child { font: 500 14px var(--mono); color: var(--accent); white-space: 
 .gate { background: var(--gate-bg); border-left: 3px solid var(--gate); border-radius: 4px; padding: 12px 14px; min-width: 0; }
 .gate b { display: block; color: var(--gate); font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; }
 .gate span { font-size: 15px; }
+pre.board { margin: 0; font: 13px/1.55 var(--mono); white-space: pre; }
 h3.sub { font: 600 13px/1.4 var(--body); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 20px 0 8px; }
 footer { font-size: 13px; color: var(--muted); }
 </style>
@@ -162,6 +163,24 @@ flowchart TD
   </section>
 
   <section>
+    <h2>Status board</h2>
+    <p>The lead prints this in the lead tab after every step, at every gate, and whenever you type <code>status</code>. Agent states come from <code>herdr agent list</code>, never guessed.</p>
+    <div class="frame"><pre class="board">HARNESS rl · add rate limiting · step 4/5 loop · sub-task 3/7 &quot;limiter middleware&quot;
+sub-tasks  ✅ ✅ ▶ ⬜ ⬜ ⬜ ⬜
+phase      code → [test] → review → pr → your gate      round 1
+agent                tab  state     doing
+rl-architect          2   idle      design approved
+rl-tracker            3   idle      sub-task 3 In Progress
+rl-coder              4   working   waiting on specialists
+  rl-coder-backend    4   working   rate limiter middleware
+rl-reviewer           5   idle      —
+rl-pr                 6   idle      PR #31 open
+rl-tester             7   working   checks + smoke
+decisions  none
+next       tester result, then review</pre></div>
+  </section>
+
+  <section>
     <h2>Decisions</h2>
     <p>Helpers never ask you directly. They send <code>ASK</code> with options and a recommendation to the lead; area specialists go through the coder. The lead collects them, plus any agent stuck on a permission prompt, and asks you <strong>once</strong> in the lead tab as a numbered "Decisions needed" list. Independent work keeps going while you decide.</p>
   </section>
@@ -185,7 +204,7 @@ flowchart TD
           <tr><td>architect</td><td>Design doc in <code>docs/design/</code></td><td>system-design, architecture</td><td>Writes code or Notion</td></tr>
           <tr><td>tracker</td><td>Notion tasks, status, PR field</td><td>Notion</td><td>Deletes tasks, writes code</td></tr>
           <tr><td>coder</td><td>Code, fixes, tests. Hands every area to its own <code>coder-&lt;area&gt;</code> specialist in a pane: backend, frontend, database, devops (devops owns all infra: Terraform for GCP and Cloudflare, CI, containers)</td><td>testing-strategy, debug</td><td>Commits, pushes</td></tr>
-          <tr><td>tester</td><td>Runs the CI checks, acceptance and smoke tests; replies TEST PASS or TEST FAIL</td><td>testing-strategy, api-test-suite-builder, playwright-pro, performance-profiler</td><td>Fixes product code, commits</td></tr>
+          <tr><td>tester</td><td>Runs the CI checks, acceptance and smoke tests; replies TEST PASS or TEST FAIL</td><td>testing-strategy, api-test-suite-builder, playwright-pro, performance-profiler, qa-browser-automation</td><td>Fixes product code, commits</td></tr>
           <tr><td>reviewer</td><td>Replies REVIEW CLEAN or FINDINGS</td><td>code-review (built in)</td><td>Edits files</td></tr>
           <tr><td>pr</td><td>Branch, commit, push, PR body with Notion links</td><td>deploy-checklist</td><td>Force-pushes, merges</td></tr>
         </tbody>

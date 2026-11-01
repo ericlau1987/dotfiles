@@ -97,6 +97,26 @@ flowchart TD
 
 Stops early and asks you after 3 failed test runs, or 3 review rounds that still have findings.
 
+## Status board
+
+The lead prints this in the lead tab after every step, at every gate, and whenever you type `status`. States come from `herdr agent list`.
+
+```
+HARNESS rl · add rate limiting · step 4/5 loop · sub-task 3/7 "limiter middleware"
+sub-tasks  ✅ ✅ ▶ ⬜ ⬜ ⬜ ⬜
+phase      code → [test] → review → pr → your gate      round 1
+agent                tab  state     doing
+rl-architect          2   idle      design approved
+rl-tracker            3   idle      sub-task 3 In Progress
+rl-coder              4   working   waiting on specialists
+  rl-coder-backend    4   working   rate limiter middleware
+rl-reviewer           5   idle      —
+rl-pr                 6   idle      PR #31 open
+rl-tester             7   working   checks + smoke
+decisions  none
+next       tester result, then review
+```
+
 ## Decisions
 
 Helpers never ask you directly. They send `ASK` with options and a recommendation to the lead (area specialists go through the coder).
@@ -119,7 +139,7 @@ The lead collects them, plus any agent stuck on a permission prompt, and asks yo
 | architect | Design doc in `docs/design/` | system-design, architecture | Writes code or Notion |
 | tracker | Notion tasks, status, PR field | Notion | Deletes tasks, writes code |
 | coder | Code, fixes, tests; hands every area to its own `coder-<area>` specialist in a pane (backend, frontend, database, devops) | testing-strategy, debug | Commits, pushes |
-| tester | Runs the CI checks, acceptance and smoke tests; replies `TEST PASS` or `TEST FAIL` | testing-strategy, api-test-suite-builder, playwright-pro, performance-profiler | Fixes product code, commits |
+| tester | Runs the CI checks, acceptance and smoke tests; replies `TEST PASS` or `TEST FAIL` | testing-strategy, api-test-suite-builder, playwright-pro, performance-profiler, qa-browser-automation | Fixes product code, commits |
 | reviewer | Replies `REVIEW CLEAN` or `REVIEW FINDINGS` | code-review (built in) | Edits files |
 | pr | Branch, commit, push, PR body with Notion links | deploy-checklist | Force-pushes, merges |
 

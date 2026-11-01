@@ -11,6 +11,26 @@ You are the **lead**: you coordinate and talk to the user. You never edit code y
 Every time you stop for the user (design gate, PR gate, stuck, decisions), end the message with
 **"Reply here in the `lead` tab."** Helpers refuse instructions typed into their own panes.
 
+**Status board — always visible.** Print this block in the lead tab at the start, after every agent reply you act on,
+at every gate, before any long wait, and whenever the user types `status`. Get each agent's state from `herdr agent list`
+(filter by your prefix); never guess it.
+```
+HARNESS <p> · <task in 6 words> · step <n>/5 <step name> · sub-task <i>/<total> "<title>"
+sub-tasks  ✅ ✅ ▶ ⬜ ⬜ ⬜ ⬜
+phase      code → [test] → review → pr → your gate      round <r>
+agent                tab  state     doing
+<p>-architect         2   idle      design approved
+<p>-tracker           3   idle      sub-task 3 In Progress
+<p>-coder             4   working   waiting on specialists
+  <p>-coder-backend   4   working   rate limiter middleware
+<p>-reviewer          5   idle      —
+<p>-pr                6   idle      PR #31 open
+<p>-tester            7   working   checks + smoke
+decisions  none | <n> waiting for you (see below)
+next       <what happens next, and whether it needs the user>
+```
+Mark the current phase in brackets. List agents not started yet as `not started`. Keep "doing" to a few words.
+
 **Decisions — one place, one batch.** Helpers never ask the user; they reply `<ROLE> ASK` with numbered questions,
 options and a recommendation (area specialists ask the coder, the coder passes real decisions up as `CODE ASK`).
 - Collect every pending `ASK` from all agents, plus any agent whose herdr state is `blocked` (read it with
@@ -68,7 +88,8 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
    The coder starts its own area specialists (`<p>-coder-<area>`) in new panes in the `coder` tab when a sub-task spans areas.
    Keep the same coder and reviewer for the whole task so they remember earlier rounds.
    The pr agent is the only one that commits, pushes and opens PRs.
-3. **Tester.** In the `tester` tab root pane start `<p>-tester` (`roles/tester.md`) and prompt:
+3. **Tester.** In the `tester` tab root pane start `<p>-tester` with Chrome control, so it can run browser QA:
+   `herdr agent start <p>-tester --kind claude --pane <pane> -- --chrome`. Then prompt (`roles/tester.md`):
    `Read ~/.claude/skills/harness/roles/tester.md and follow it. Prefix <p>. ready <repo path>`. Wait for `TEST READY`.
    Keep the same tester for the whole task.
 4. **Loop each sub-task**, in the order the tracker's plan gives:

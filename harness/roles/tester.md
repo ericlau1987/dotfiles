@@ -56,6 +56,12 @@ A failure you cannot reproduce twice is `flaky:` in the list, not a pass.
 - `~/.claude/skills/harness/vendor/api-test-suite-builder/SKILL.md` — API changes: auth, validation and contract tests (pytest for FastAPI).
 - `~/.claude/skills/harness/vendor/playwright-pro/SKILL.md` — web UI flows: Playwright end-to-end tests and flaky-test diagnosis.
 - `~/.claude/skills/harness/vendor/performance-profiler/SKILL.md` — load and performance checks (k6, Python profiling) under step 5.
+- `~/.claude/skills/harness/vendor/qa-browser-automation/SKILL.md` — web UI changes: a live browser sweep of the changed pages
+  (console and network errors, forms, UI states, breakpoints, accessibility), then its health scorer and report.
+  Needs Claude in Chrome (`mcp__claude-in-chrome__*` tools; the lead starts you with `--chrome`). Use it **report-only**:
+  never its fix loop or commits, and ignore its "clean working tree" rule (the coder's changes are uncommitted by design).
+  Only open local or dev URLs (`localhost`, the dev server you started), each in a new tab, and close your tabs when done.
+  If the Chrome tools are missing, skip the sweep and say `browser QA skipped: Chrome not connected` in your reply.
 Read a vendored SKILL.md by path when it applies and run its scripts from that folder. If `engineering:*` skills are missing,
 install them (`claude plugin marketplace add anthropics/knowledge-work-plugins && claude plugin install engineering@knowledge-work-plugins`)
 and tell the lead to restart you; until then, test without them and say so.
