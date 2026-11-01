@@ -3,6 +3,19 @@ name: harness
 description: "Control Herdr, a terminal multiplexer for coding agents. Use only when the user explicitly mentions Herdr or asks to use Herdr to inspect or control panes, tabs, workspaces, commands, or another agent. Do not use merely because a task could benefit from a background terminal, delegation, or parallel work. Requires HERDR_ENV=1."
 ---
 
+# Harness flow
+
+When the user starts a task with `/harness`, run this flow on top of the Herdr rules below.
+
+1. **Tracker first.** Split a pane and start a `claude` agent named `tracker`. Prompt it:
+   `Read ~/.claude/skills/harness/roles/tracker.md and follow it. plan <the user's task, repo path, branch>`
+   Wait for its `TRACKER PLAN`. If it replies `TRACKER ASK`, relay the question to the user.
+2. **Do the work** sub-task by sub-task, in the order the plan gives. Start other roles (e.g. `reviewer`) as needed.
+3. **After each step**, prompt the tracker:
+   `update <sub-task URL> <what you did, one or two lines> [PR <url>]`
+   Always include the PR URL once one exists.
+4. When everything is done, tell the user the final tracker status, and ask before closing panes you created.
+
 # Herdr
 
 Herdr organizes terminals into workspaces, tabs, and panes, recognizes coding agents running inside panes, and exposes the current session through the `herdr` CLI.
