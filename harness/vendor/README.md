@@ -26,7 +26,7 @@ shell and delete calls before vendoring. Run them from the skill folder: `python
 | runbook-generator | coder-devops |
 | api-test-suite-builder | tester |
 | playwright-pro | tester |
-| performance-profiler | tester |
+| performance-profiler | tester (load checks), coder-backend and coder-frontend (profiling a perf failure) |
 | qa-browser-automation | tester (needs Claude in Chrome) |
 | pr-review-expert | reviewer |
 | senior-security | reviewer (secret scan, STRIDE) |

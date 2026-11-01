@@ -25,6 +25,8 @@ Stay inside your area. If the change needs work in another area, say so in your 
 
 **Vendored skills** (read the SKILL.md by path when it applies; run its scripts from that folder):
 - `~/.claude/skills/harness/vendor/api-design-reviewer/SKILL.md` — API changes: lint the OpenAPI spec and check for breaking changes
+- `~/.claude/skills/harness/vendor/performance-profiler/SKILL.md` — only when a `fix` contains a performance failure from the tester (e.g. p95 too high):
+  profile first (CPU, memory, slow queries and N+1 in the API and worker) with its bottleneck detector and resource analyzer, fix the real bottleneck, and say what you measured.
 
 **Reply with ONLY:**
 ```
