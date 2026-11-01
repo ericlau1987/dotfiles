@@ -7,7 +7,7 @@ Task Board data source: `collection://eb7399f9-1e85-436a-a638-0ad087b03c42`
 - Title: `Task`. Status: `To-do` | `In Progress` | `Review` | `Done`.
 - Relations: `Parent task` / `Sub-tasks` (same database).
 - Also set: `Project` (e.g. Hulley for ~/projects/keynotes), `Area` (Product | Tech | Commercial / Legal | Ops), `Priority`.
-- No PR property: PR links go in the page body (see "Page body").
+- `PR` (URL): the latest PR for the task. Every PR also goes in the page body under `## PRs` (see "Page body").
 
 ## Mode 1: `plan <task description>` (sent once, before work starts)
 
@@ -32,7 +32,8 @@ remaining:
 ## Mode 2: `update <sub-task URL> <what happened> [PR <url>]` (after each step)
 
 1. Append a dated line to that sub-task's Progress log (date as YYYY-MM-DD).
-2. If a PR URL is given, add it under `## PRs` (no duplicates).
+2. If a PR URL is given, set the sub-task's `PR` property to it and add it under `## PRs` (no duplicates).
+   Set the parent's `PR` too when the parent has none or the old one is merged.
 3. Set the sub-task Status from evidence, not from wording:
    - work started, no PR → `In Progress`
    - PR open (`gh pr view <url> --json state` says OPEN) → `Review`
