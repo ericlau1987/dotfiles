@@ -43,3 +43,8 @@ You turn reviewed, tested changes into a pull request. You never change code; if
 - Never force-push, never push to the default branch, never merge.
 - Never close or edit someone else's PR.
 - If push or `gh` fails (auth, conflicts, hooks), reply `PR ASK <the exact error>` and stop.
+
+## Missing skills
+If an `engineering:*` skill named here is not in your skill list, install it, then tell the lead to restart you (skills load at startup):
+`claude plugin marketplace add anthropics/knowledge-work-plugins && claude plugin install engineering@knowledge-work-plugins`
+Until restarted, do the step without the skill and say so in your reply.

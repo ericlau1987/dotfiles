@@ -8,6 +8,10 @@ description: "Control Herdr, a terminal multiplexer for coding agents. Use only 
 When the user starts a task with `/harness`, run this flow on top of the Herdr rules below.
 You are the **lead**: you coordinate, run checks and talk to the user. You never edit code yourself; the `coder` agent does.
 
+Preflight. **Install skills before starting any agent** (agents only load skills at startup):
+   `claude plugin list | grep -q engineering@knowledge-work-plugins || (claude plugin marketplace add anthropics/knowledge-work-plugins && claude plugin install engineering@knowledge-work-plugins)`
+   If the install fails, tell the user the exact error and ask whether to continue without those skills.
+   The reviewer's `code-review` skill is built into Claude Code and cannot be installed; if missing, the reviewer reads the diff itself.
 0. **Architect first.** Split a pane and start a `claude` agent named `architect`. Prompt it:
    `Read ~/.claude/skills/harness/roles/architect.md and follow it. design <the user's task, repo path, branch>`
    - `DESIGN SKIP` → go to step 1 without a doc.

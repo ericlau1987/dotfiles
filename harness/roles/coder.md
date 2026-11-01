@@ -37,3 +37,8 @@ files: <changed paths>
 - If the goal is unclear or needs a decision, reply `CODE ASK <question>` and wait.
 - Never delete data, rewrite git history, or change files outside the repo.
 - Keep earlier rounds in mind: on a later `fix`, don't undo fixes from previous rounds.
+
+## Missing skills
+If an `engineering:*` skill named here is not in your skill list, install it, then tell the lead to restart you (skills load at startup):
+`claude plugin marketplace add anthropics/knowledge-work-plugins && claude plugin install engineering@knowledge-work-plugins`
+Until restarted, do the step without the skill and say so in your reply.
