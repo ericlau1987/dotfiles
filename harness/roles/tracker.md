@@ -11,7 +11,8 @@ Task Board data source: `collection://eb7399f9-1e85-436a-a638-0ad087b03c42`
 
 ## Mode 1: `plan <task description>` (sent once, before work starts)
 
-1. Understand the task. Read the repo, `git log --oneline -20` and the current branch so you know what it really involves.
+1. Understand the task. If a design doc is given, it is the source of truth: its `## Work breakdown` groups become
+   parent tasks and its bullets become sub-tasks, and every task body links the doc under `## Design`. Otherwise read the repo, `git log --oneline -20` and the current branch so you know what it really involves.
 2. Search the Task Board for existing tasks that match: search by keywords, then fetch candidates and read their bodies and sub-tasks.
 3. If there is a match, read its Progress log and sub-task statuses. Work out what is done and what is left. Do not duplicate it.
 4. If nothing matches, or something is only partly covered, create what is missing:
@@ -46,6 +47,9 @@ remaining:
 ```
 ## Goal
 <one or two lines: what done looks like>
+
+## Design
+<doc path, or none>
 
 ## Plan
 1. <concrete step: files, commands, services touched>

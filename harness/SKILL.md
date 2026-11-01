@@ -8,8 +8,14 @@ description: "Control Herdr, a terminal multiplexer for coding agents. Use only 
 When the user starts a task with `/harness`, run this flow on top of the Herdr rules below.
 You are the **lead**: you coordinate, run checks and talk to the user. You never edit code yourself; the `coder` agent does.
 
-1. **Tracker first.** Split a pane and start a `claude` agent named `tracker`. Prompt it:
-   `Read ~/.claude/skills/harness/roles/tracker.md and follow it. plan <the user's task, repo path, branch>`
+0. **Architect first.** Split a pane and start a `claude` agent named `architect`. Prompt it:
+   `Read ~/.claude/skills/harness/roles/architect.md and follow it. design <the user's task, repo path, branch>`
+   - `DESIGN SKIP` → go to step 1 without a doc.
+   - `DESIGN READY <path>` → **design gate:** show the user the doc path, summary and open questions, and wait.
+     Comments → architect `revise <comments>` → show again. Approved → architect: `the user approved; set Status: Approved`.
+     Do not start step 1 until the design is approved.
+1. **Tracker next.** Split a pane and start a `claude` agent named `tracker`. Prompt it:
+   `Read ~/.claude/skills/harness/roles/tracker.md and follow it. plan <the user's task, repo path, branch> [design <doc path>]`
    Wait for its `TRACKER PLAN`. If it replies `TRACKER ASK`, relay the question to the user.
 2. **Reviewer second.** Split a pane and start a `claude` agent named `reviewer`. Prompt it once:
    `Read ~/.claude/skills/harness/roles/reviewer.md and follow it. Reply READY.`
@@ -20,7 +26,7 @@ You are the **lead**: you coordinate, run checks and talk to the user. You never
    `justfile`, `Makefile`) and list the commands CI runs: lint, typecheck, test, build. Run only those for the parts
    the sub-task touches. Split a pane named for running them (a plain shell, not an agent), and reuse it.
 4. **Loop each sub-task**, in the order the tracker's plan gives:
-   1. **Code.** Coder: `code <sub-task URL> <goal and plan from the tracker>`. Wait for `CODE DONE`
+   1. **Code.** Coder: `code <sub-task URL> <goal and plan from the tracker> [design <doc path>]`. Wait for `CODE DONE`
       (on `CODE ASK`, answer it or ask the user). Then tracker: `update <sub-task URL> started: <what you changed>`.
    2. **Test.** In the checks pane: `herdr pane run <pane> "<checks>"`, then `herdr pane wait-output` and `pane read`.
       If anything fails, coder: `fix <the failing output>`, then test again. A test failure does not count as a review round.
@@ -28,7 +34,7 @@ You are the **lead**: you coordinate, run checks and talk to the user. You never
    3. **Review.** Only once tests pass. Reviewer: `review <scope>` (e.g. `uncommitted`, or the commit range).
    4. **If `REVIEW FINDINGS`:** tracker: `update <sub-task URL> review round <n>: <the numbered findings>`.
       Coder: `fix <the numbered findings>`. Pass any `disputed` items to the reviewer in the next round. Then go back to step 2 (test, then review round n+1).
-   5. **If `REVIEW CLEAN`:** pr agent: `ship <sub-task URL> <parent URL> <one-line summary> tests: <commands → result> review: <n> rounds, clean`.
+   5. **If `REVIEW CLEAN`:** pr agent: `ship <sub-task URL> <parent URL> <one-line summary> [design <doc path>] tests: <commands → result> review: <n> rounds, clean`.
       Wait for `PR OK <url>`; on `PR ASK`, fix it or ask the user. Then tracker: `update <sub-task URL> review clean, tests pass, PR <url>`.
       Do not commit or push yourself.
    6. **Manual review gate.** Stop and ask the user to review the PR. Show: the PR URL, the Notion sub-task URL,

@@ -7,6 +7,7 @@ You turn reviewed, tested changes into a pull request. You never change code; if
 1. **Branch.** If on the default branch, create one: `git switch -c <short-kebab-name-from-the-summary>`.
    If already on a feature branch, stay on it.
 2. **Commit.** Stage only the files this sub-task changed (`git status`, then `git add <paths>`; never `git add -A` blindly).
+   If a design doc is given and not yet committed, include it in this commit.
    Write a commit message in the repo's style (`git log --oneline -10`). Nothing to commit → skip.
 3. **Push.** `git push -u origin HEAD`.
 4. **PR.** Check for an open PR on this branch: `gh pr view --json url,body,state`.
@@ -20,6 +21,9 @@ You turn reviewed, tested changes into a pull request. You never change code; if
 ```
 ## Summary
 - <what changed and why, one line per change>
+
+## Design
+- <doc path, or none>
 
 ## Notion
 - Parent: <parent URL>

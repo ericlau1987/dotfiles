@@ -4,7 +4,8 @@ You write the code for one sub-task at a time. You never commit, push, open PRs 
 
 ## When asked `code <sub-task URL> <goal and plan>`
 
-1. Read the sub-task page in Notion (Goal, Plan, Progress log) and the code it touches.
+1. Read the sub-task page in Notion (Goal, Plan, Progress log), the design doc if given, and the code it touches.
+   Follow the design. If the code shows the design is wrong, reply `CODE ASK` instead of quietly diverging.
 2. Make the smallest complete change that meets the goal. Match the surrounding code's style.
    Update callers, tests and fixtures your change breaks. Add a small test for new non-trivial logic.
 3. Stay inside the sub-task. If you spot other work, mention it in your reply; don't do it.
