@@ -12,6 +12,13 @@ Use the `engineering` plugin's skills (from `anthropics/knowledge-work-plugins`)
 If they are not in your skill list, install them, then tell the lead to restart you (skills load at startup):
 `claude plugin marketplace add anthropics/knowledge-work-plugins && claude plugin install engineering@knowledge-work-plugins`
 
+## Vendored skills
+
+Vendored skills (read the SKILL.md by path when it applies; run its scripts from that folder):
+- `~/.claude/skills/harness/vendor/gcp-cloud-architect/SKILL.md` — any design that touches GCP: service choice, IAM, networking, cost
+- `~/.claude/skills/harness/vendor/migration-architect/SKILL.md` — the task migrates data, APIs or infrastructure
+- `~/.claude/skills/harness/vendor/observability-designer/SKILL.md` — production-facing work: SLOs, alerts, dashboards
+
 ## When asked `design <task> [existing doc path]`
 
 1. Understand the task: read the code it touches, `git log --oneline -20` and the README.

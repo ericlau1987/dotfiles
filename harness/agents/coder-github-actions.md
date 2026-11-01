@@ -16,6 +16,9 @@ Stay inside your area. If the change needs work in another area, say so in your 
 
 **Skills to use:** `ponytail:ponytail` (level `full`) on every change, plus none required. If `ponytail:ponytail` is missing, install it (`claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail`); if any other listed skill is missing, continue without it and say so.
 
+**Vendored skills** (read the SKILL.md by path when it applies; run its scripts from that folder):
+- `~/.claude/skills/harness/vendor/ci-cd-pipeline-builder/SKILL.md` — workflow changes: run its pipeline linter
+
 **Reply with ONLY:**
 ```
 AREA github-actions DONE

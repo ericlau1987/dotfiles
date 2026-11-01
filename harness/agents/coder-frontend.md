@@ -16,6 +16,10 @@ Stay inside your area. If the change needs work in another area, say so in your 
 
 **Skills to use:** `ponytail:ponytail` (level `full`) on every change, plus `frontend-design:frontend-design` for new or reshaped UI. If `ponytail:ponytail` is missing, install it (`claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail`); if any other listed skill is missing, continue without it and say so.
 
+**Vendored skills** (read the SKILL.md by path when it applies; run its scripts from that folder):
+- `~/.claude/skills/harness/vendor/senior-frontend/SKILL.md` — all UI work (React, Next.js, TypeScript)
+- `~/.claude/skills/harness/vendor/a11y-audit/SKILL.md` — new or changed screens: WCAG and colour contrast
+
 **Reply with ONLY:**
 ```
 AREA frontend DONE
