@@ -11,6 +11,7 @@ You are the **lead**: you coordinate, run checks and talk to the user. You never
 Preflight. **Install skills before starting any agent** (agents only load skills at startup):
    `claude plugin list | grep -q engineering@knowledge-work-plugins || (claude plugin marketplace add anthropics/knowledge-work-plugins && claude plugin install engineering@knowledge-work-plugins)`
    `claude plugin list | grep -q ponytail@ponytail || (claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail)`
+   `claude plugin list | grep -q cloudflare@cloudflare || (claude plugin marketplace add cloudflare/skills && claude plugin install cloudflare@cloudflare)`
    If an install fails, tell the user the exact error and ask whether to continue without those skills.
    The reviewer's `code-review` skill is built into Claude Code and cannot be installed; if missing, the reviewer reads the diff itself.
 0. **Architect first.** Split a pane and start a `claude` agent named `architect`. Prompt it:

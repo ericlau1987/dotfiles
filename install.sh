@@ -24,8 +24,12 @@ if command -v claude >/dev/null; then
     claude plugin marketplace add DietrichGebert/ponytail
     claude plugin install ponytail@ponytail
   }
+  claude plugin list 2>/dev/null | grep -q cloudflare@cloudflare || {
+    claude plugin marketplace add cloudflare/skills
+    claude plugin install cloudflare@cloudflare
+  }
 else
-  echo "claude not installed: skipping engineering and ponytail plugins"
+  echo "claude not installed: skipping engineering, ponytail and cloudflare plugins"
 fi
 
 if command -v herdr >/dev/null; then
