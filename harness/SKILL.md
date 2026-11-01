@@ -13,16 +13,22 @@ When the user starts a task with `/harness`, run this flow on top of the Herdr r
 2. **Reviewer second.** Split a pane and start a `claude` agent named `reviewer`. Prompt it once:
    `Read ~/.claude/skills/harness/roles/reviewer.md and follow it. Reply READY.`
    Keep this one reviewer for the whole task so it remembers earlier rounds.
-3. **Loop each sub-task**, in the order the tracker's plan gives:
+3. **Find the checks once.** Read the repo's CI (`.github/workflows/*.yml`) and scripts (`package.json`, `pyproject.toml`,
+   `justfile`, `Makefile`) and list the commands CI runs: lint, typecheck, test, build. Run only those for the parts
+   the sub-task touches. Split a pane named for running them (a plain shell, not an agent), and reuse it.
+4. **Loop each sub-task**, in the order the tracker's plan gives:
    1. **Code.** Do the sub-task. Then tracker: `update <sub-task URL> started: <what you changed>`.
-   2. **Review.** Reviewer: `review <scope>` (e.g. `uncommitted`, or the commit range).
-   3. **If `REVIEW FINDINGS`:** tracker: `update <sub-task URL> review round <n>: <the numbered findings>`.
-      Fix every finding, then go back to step 2 (round n+1).
-   4. **If `REVIEW CLEAN`:** commit, push, open or update the PR. Tracker: `update <sub-task URL> review clean PR <url>`.
-   5. **Stop after 3 rounds** that still have findings. Tracker: `update <sub-task URL> blocked after 3 review rounds: <open findings>`,
+   2. **Test.** In the checks pane: `herdr pane run <pane> "<checks>"`, then `herdr pane wait-output` and `pane read`.
+      If anything fails, fix it and test again. A test failure does not count as a review round.
+      After 3 failed test runs in a row, tracker: `update <sub-task URL> blocked: tests failing: <error>`, and ask the user.
+   3. **Review.** Only once tests pass. Reviewer: `review <scope>` (e.g. `uncommitted`, or the commit range).
+   4. **If `REVIEW FINDINGS`:** tracker: `update <sub-task URL> review round <n>: <the numbered findings>`.
+      Fix every finding, then go back to step 2 (test, then review round n+1).
+   5. **If `REVIEW CLEAN`:** commit, push, open or update the PR. Tracker: `update <sub-task URL> review clean, tests pass, PR <url>`.
+   6. **Stop after 3 review rounds** that still have findings. Tracker: `update <sub-task URL> blocked after 3 review rounds: <open findings>`,
       then show the user the open findings and ask how to proceed. Do not start the next sub-task.
-   Never skip the review, and never mark a sub-task done yourself; the tracker sets status.
-4. When everything is done, tell the user the final tracker status, and ask before closing panes you created.
+   Never skip tests or review, and never mark a sub-task done yourself; the tracker sets status.
+5. When everything is done, tell the user the final tracker status, and ask before closing panes you created.
 
 # Herdr
 
