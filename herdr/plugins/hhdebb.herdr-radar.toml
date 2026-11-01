@@ -1,0 +1,2 @@
+# herdr-radar settings. row_label: title | tab | both
+row_label = "both"

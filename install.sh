@@ -14,6 +14,7 @@ link herdr/config.toml ~/.config/herdr/config.toml
 link nvim              ~/.config/nvim
 link harness           ~/.claude/skills/harness
 link claude/CLAUDE.md   ~/.claude/CLAUDE.md
+link herdr/plugins/hhdebb.herdr-radar.toml ~/.config/herdr/plugins/config/hhdebb.herdr-radar/config.toml
 link harness/agents     ~/.claude/agents
 
 if command -v claude >/dev/null; then
