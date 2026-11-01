@@ -7,7 +7,7 @@ disable-model-invocation: true
 # Harness flow
 
 When the user starts a task with `/harness`, run this flow on top of the Herdr rules below.
-You are the **lead**: you coordinate, run checks and talk to the user. You never edit code yourself; the `coder` agent does.
+You are the **lead**: you coordinate and talk to the user. You never edit code yourself; the `coder` agent does.
 Every time you stop for the user (design gate, PR gate, stuck, decisions), end the message with
 **"Reply here in the `lead` tab."** Helpers refuse instructions typed into their own panes.
 
@@ -44,7 +44,7 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
    | 4 | `coder` | `<p>-coder` (root pane), plus one pane per area specialist (`<p>-coder-<area>`), started for every coded sub-task |
    | 5 | `reviewer` | `<p>-reviewer` |
    | 6 | `pr` | `<p>-pr` |
-   | 7 | `checks` | a plain shell for test runs (root pane); a second shell split right only when a sub-task needs a dev server or logs |
+   | 7 | `tester` | `<p>-tester` (root pane); it splits a second pane itself when a smoke test needs a dev server or logs |
 
    If `DESIGN SKIP` happens, leave the `architect` tab empty rather than renumbering.
 
@@ -68,17 +68,15 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
    The coder starts its own area specialists (`<p>-coder-<area>`) in new panes in the `coder` tab when a sub-task spans areas.
    Keep the same coder and reviewer for the whole task so they remember earlier rounds.
    The pr agent is the only one that commits, pushes and opens PRs.
-3. **Find the checks once.** Read the repo's CI (`.github/workflows/*.yml`) and scripts (`package.json`, `pyproject.toml`,
-   `justfile`, `Makefile`) and list the commands CI runs: lint, typecheck, test, build. Run only those for the parts
-   the sub-task touches, in the `checks` tab root pane (a plain shell, not an agent). Reuse it.
-   If a sub-task needs the app running, split the checks pane right, start the dev server there, and read its logs from that pane.
+3. **Tester.** In the `tester` tab root pane start `<p>-tester` (`roles/tester.md`) and prompt:
+   `Read ~/.claude/skills/harness/roles/tester.md and follow it. Prefix <p>. ready <repo path>`. Wait for `TEST READY`.
+   Keep the same tester for the whole task.
 4. **Loop each sub-task**, in the order the tracker's plan gives:
    1. **Code.** Coder: `code <sub-task URL> <goal and plan from the tracker> [design <doc path>]`. Wait for `CODE DONE`
       (on `CODE ASK`, answer it or ask the user). Then tracker: `update <sub-task URL> started: <what you changed>`.
-   2. **Test.** In the checks pane: `herdr pane run <pane> "<checks>"`, then `herdr pane wait-output` and `pane read`.
-      Match on something every run prints (e.g. a final exit marker: append `; echo "CHECKS_EXIT=$?"` and wait for `CHECKS_EXIT=`),
-      not on success text, so a failing run does not time out.
-      If anything fails, coder: `fix attempt <n> <the failing output>` (n counts failed runs for this sub-task), then test again. A test failure does not count as a review round.
+   2. **Test.** Tester: `test <sub-task URL> <what changed, from CODE DONE> [design <doc path>]`. Wait for `TEST PASS` or `TEST FAIL`.
+      On `TEST FAIL`, coder: `fix attempt <n> <the numbered failures>` (n counts failed runs for this sub-task), then test again.
+      A test failure does not count as a review round. Test files the tester added are part of the change; the reviewer reviews them too.
       After 3 failed test runs in a row, tracker: `update <sub-task URL> blocked: tests failing: <error>`, and ask the user.
    3. **Review.** Only once tests pass. Reviewer: `review <scope>` (e.g. `uncommitted`, or the commit range).
    4. **If `REVIEW FINDINGS`:** tracker: `update <sub-task URL> review round <n>: <the numbered findings>`.
@@ -87,7 +85,7 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
       Wait for `PR OK <url>`; on `PR ASK`, fix it or ask the user. Then tracker: `update <sub-task URL> review clean, tests pass, PR <url>`.
       Do not commit or push yourself.
    6. **Manual review gate.** Stop and ask the user to review the PR. Show: the PR URL, the Notion sub-task URL,
-      a 3-line summary of the change, what checks ran, and "the reviewer's notes are in the `reviewer` tab (ctrl+b 5)".
+      a 3-line summary of the change, what the tester ran, and "the reviewer's notes are in the `reviewer` tab (ctrl+b 5)".
       If `herdr notification` can alert the user, send one. Then wait. Do not start the next sub-task until the user answers.
       - **Approved** → tracker: `update <sub-task URL> manual review approved PR <url>`, then the next sub-task.
       - **Changes requested** → tracker: `update <sub-task URL> manual review: <the user's comments>`.
@@ -98,7 +96,7 @@ Layout. One workspace per repo (the one you are in). Keep your own tab as **`lea
    Never skip tests, review or the manual review gate, and never mark a sub-task done yourself; the tracker sets status.
    If any `--wait` times out or stalls, read the agent before re-sending: a timeout does not prove the prompt was not delivered.
    For long agent replies, ask the agent to write them to a Markdown file and reply with the path.
-5. When everything is done, tell the user the final tracker status, and ask before closing the tabs you created (`architect` to `checks`).
+5. When everything is done, tell the user the final tracker status, and ask before closing the tabs you created (`architect` to `tester`).
 
 # Herdr
 

@@ -24,6 +24,9 @@ shell and delete calls before vendoring. Run them from the skill folder: `python
 | dependency-auditor | coder-devops |
 | kubernetes-operator | coder-devops |
 | runbook-generator | coder-devops |
+| api-test-suite-builder | tester |
+| playwright-pro | tester |
+| performance-profiler | tester |
 | pr-review-expert | reviewer |
 
 To update: re-copy the folders from a newer commit, re-run the script check, update the commit above.

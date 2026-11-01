@@ -1,6 +1,6 @@
 # Harness agent flow
 
-How `/harness <task>` runs in herdr: one lead agent coordinates five helper agents, from design doc to an approved pull request for every sub-task.
+How `/harness <task>` runs in herdr: one lead agent coordinates six helper agents, from design doc to an approved pull request for every sub-task.
 
 Live page: https://claude.ai/artifact/CLW9mE2AZSM3ZagBQh2ojj
 
@@ -11,14 +11,14 @@ Helpers never talk to each other, except the coder and the area specialists it s
 ```mermaid
 flowchart TB
   YOU(["You"])
-  LEAD["LEAD<br/>preflight · runs checks · decides next step"]
+  LEAD["LEAD<br/>preflight · decides next step"]
   YOU <-->|"/harness · design gate · PR gate"| LEAD
   LEAD --> ARCH["architect"] --> D[("docs/design/")]
   LEAD --> TRK["tracker"] --> N[("Notion Task Board")]
   LEAD --> COD["coder"] --> C[("code")]
   LEAD --> REV["reviewer"] --> R[("reads diff")]
   LEAD --> PR["pr"] --> G[("GitHub PR")]
-  LEAD --> CHK["checks pane<br/>lint · test · build"]
+  LEAD --> TST["tester"] --> TT[("checks · acceptance · smoke")]
 ```
 
 ## Tabs
@@ -33,7 +33,7 @@ One herdr workspace per repo, one tab per agent (herdr's own advice: "use tabs t
 | 4 | `coder` | coder, plus a pane for each area specialist it starts (e.g. `rl-coder-devops`) |
 | 5 | `reviewer` | reviewer |
 | 6 | `pr` | pr |
-| 7 | `checks` | test runs; a dev server and its logs when needed |
+| 7 | `tester` | tester; a second pane for a dev server and its logs when a smoke test needs one |
 
 Agent names carry a task prefix (e.g. `rl-coder`) because herdr names are unique across the whole server.
 
@@ -43,7 +43,7 @@ Tabs (numbers assume the harness created them in a fresh workspace; other open t
 
 | Keys | Does |
 |---|---|
-| `ctrl+b` `1` … `7` | jump to lead / architect / tracker / coder / reviewer / pr / checks |
+| `ctrl+b` `1` … `7` | jump to lead / architect / tracker / coder / reviewer / pr / tester |
 | `ctrl+b` `n` / `p` | next / previous tab |
 | `ctrl+b` `g` | go-to picker |
 
@@ -77,11 +77,11 @@ flowchart TD
   A -->|DESIGN READY| DG{{"⏸ You: design gate"}}
   DG -->|comments / go with B| REVISE["LEAD → architect: revise"] --> DG
   DG -->|approved| T["LEAD → tracker: plan<br/>Notion parent tasks + sub-tasks"]
-  T --> SETUP["LEAD starts coder, reviewer, pr<br/>reads CI · opens checks pane"]
+  T --> SETUP["LEAD starts coder, reviewer, pr, tester<br/>tester finds the CI checks"]
   SETUP --> CODE
 
   subgraph LOOP["For each sub-task"]
-    CODE["LEAD → coder: code<br/>tracker: started → In Progress"] --> TEST{"LEAD runs checks"}
+    CODE["LEAD → coder: code<br/>tracker: started → In Progress"] --> TEST{"LEAD → tester: test<br/>checks · acceptance · smoke"}
     TEST -->|fail| FIXT["LEAD → coder: fix attempt n<br/>/debug from n ≥ 2"] --> TEST
     TEST -->|pass| RV{"LEAD → reviewer<br/>/code-review high"}
     RV -->|FINDINGS| FIXR["LEAD → tracker: log round<br/>LEAD → coder: fix"] --> TEST
@@ -115,10 +115,11 @@ The lead collects them, plus any agent stuck on a permission prompt, and asks yo
 
 | Agent | Job | Skills | Never |
 |---|---|---|---|
-| lead | Coordinates, runs checks, talks to you | harness ([SKILL.md](SKILL.md)) | Writes code, commits, edits Notion |
+| lead | Coordinates, talks to you | harness ([SKILL.md](SKILL.md)) | Writes code, commits, edits Notion |
 | architect | Design doc in `docs/design/` | system-design, architecture | Writes code or Notion |
 | tracker | Notion tasks, status, PR field | Notion | Deletes tasks, writes code |
 | coder | Code, fixes, tests; hands every area to its own `coder-<area>` specialist in a pane (backend, frontend, database, devops) | testing-strategy, debug | Commits, pushes |
+| tester | Runs the CI checks, acceptance and smoke tests; replies `TEST PASS` or `TEST FAIL` | testing-strategy, api-test-suite-builder, playwright-pro, performance-profiler | Fixes product code, commits |
 | reviewer | Replies `REVIEW CLEAN` or `REVIEW FINDINGS` | code-review (built in) | Edits files |
 | pr | Branch, commit, push, PR body with Notion links | deploy-checklist | Force-pushes, merges |
 
