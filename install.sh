@@ -33,7 +33,12 @@ else
   echo "claude not installed: skipping engineering, ponytail and cloudflare plugins"
 fi
 
+command -v zoe >/dev/null || { command -v brew >/dev/null && brew install furkankly/tap/zoetrope; }
+
 if command -v herdr >/dev/null; then
+  herdr integration install claude >/dev/null   # session ids per pane, for zoetrope
+  grep -q furkankly.zoetrope ~/.config/herdr/plugins.json 2>/dev/null || herdr plugin install furkankly/zoetrope/herdr-plugin --yes
+  # its key (prefix+shift+z) is already in herdr/config.toml
   grep -q chmarax.herdr-nvim ~/.config/herdr/plugins.json 2>/dev/null || herdr plugin install ChmaraX/herdr-nvim
 else
   echo "herdr not installed: brew install herdr, then rerun"
