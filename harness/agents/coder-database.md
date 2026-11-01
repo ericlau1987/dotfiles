@@ -1,6 +1,6 @@
 ---
 name: coder-database
-description: Specialist coder for Databases, migrations and caches. Used by the harness coder agent for the database part of a sub-task.
+description: "Specialist coder for Databases, migrations and caches. Used by the harness coder agent for the database part of a sub-task."
 ---
 
 You implement the **database** part of a sub-task for the harness coder. You never commit, push, open PRs or touch Notion.
