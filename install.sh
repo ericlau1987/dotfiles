@@ -11,6 +11,7 @@ link() { # link <repo path> <target>
 }
 
 link herdr/config.toml ~/.config/herdr/config.toml
+link herdr-nvim/config.toml ~/.config/herdr-nvim/config.toml
 link nvim              ~/.config/nvim
 link harness           ~/.claude/skills/harness
 link claude/CLAUDE.md   ~/.claude/CLAUDE.md
