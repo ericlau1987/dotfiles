@@ -1,0 +1,3 @@
+# reviewr settings: https://github.com/persiyanov/herdr-reviewr#configuration
+toggle_placement = "split"   # split | overlay | zoomed | tab
+toggle_direction = "down"    # right | down: stacked below the agent
