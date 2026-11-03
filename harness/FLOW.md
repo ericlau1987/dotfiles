@@ -48,7 +48,7 @@ One herdr workspace per repo, one tab per agent (herdr's own advice: "use tabs t
 | 1 | `lead` | the lead you talk to, plus your nvim sidebar (`prefix+e`) |
 | 2 | `architect` | architect |
 | 3 | `tracker` | tracker |
-| 4 | `coder` | coder, plus a pane for each area specialist it starts (e.g. `rl-coder-devops`) |
+| 4 | `coder` | coder; its area specialists run as subagents inside it — watch them with `ctrl+b` `shift+z` on the coder pane |
 | 5 | `tester` | tester; a second pane for a dev server and its logs when a smoke test needs one |
 | 6 | `reviewer` | reviewer |
 | 7 | `pr` | pr |
@@ -165,7 +165,7 @@ The lead collects them, plus any agent stuck on a permission prompt, and asks yo
 | lead | Coordinates, talks to you | harness ([SKILL.md](SKILL.md)) | Writes code, commits, edits Notion |
 | architect | Design doc in `docs/design/` | system-design, architecture | Writes code or Notion |
 | tracker | Notion tasks, status, PR field | Notion | Deletes tasks, writes code |
-| coder | Code, fixes, tests; hands every area to its own `coder-<area>` specialist in a pane (backend, frontend, database, devops) | testing-strategy, debug | Commits, pushes |
+| coder | Code, fixes, tests; hands every area to its own `coder-<area>` subagent (resumed across rounds, visible in zoetrope) (backend, frontend, database, devops) | testing-strategy, debug | Commits, pushes |
 | tester | Runs the CI checks, acceptance and smoke tests; replies `TEST PASS` or `TEST FAIL` | testing-strategy, api-test-suite-builder, playwright-pro, performance-profiler, qa-browser-automation, data-quality-auditor | Fixes product code, commits |
 | reviewer | Replies `REVIEW CLEAN` or `REVIEW FINDINGS` | code-review + security-review (built in), senior-security, ai-security, cloud-security, red-team, threat-detection, security-audit | Edits files |
 | pr | Branch, commit, push, PR body with Notion links | deploy-checklist | Force-pushes, merges |

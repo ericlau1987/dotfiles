@@ -33,7 +33,7 @@ agent                tab  state     doing
 <p>-architect         2   idle      design approved
 <p>-tracker           3   idle      sub-task 3 In Progress
 <p>-coder             4   working   waiting on specialists
-  <p>-coder-backend   4   working   rate limiter middleware
+  └ coder-backend     4   working   rate limiter middleware (subagent, from the coder's report)
 <p>-tester            5   working   checks + smoke
 <p>-reviewer          6   idle      —
 <p>-pr                7   idle      PR #31 open
@@ -93,7 +93,7 @@ Layout (you are the lead, `--here` mode). `WT` is your checkout (`git rev-parse 
    | 1 | `lead` | you (and the user's nvim sidebar, `prefix+e`) |
    | 2 | `architect` | `<p>-architect` |
    | 3 | `tracker` | `<p>-tracker` |
-   | 4 | `coder` | `<p>-coder` (root pane), plus one pane per area specialist (`<p>-coder-<area>`), started for every coded sub-task |
+   | 4 | `coder` | `<p>-coder` (one pane). Its area specialists run as Claude Code subagents inside it; the user watches them with zoetrope (`ctrl+b shift+z` on the coder pane) |
    | 5 | `tester` | `<p>-tester` (root pane); it splits a second pane itself when a smoke test needs a dev server or logs |
    | 6 | `reviewer` | `<p>-reviewer` |
    | 7 | `pr` | `<p>-pr` |
@@ -118,7 +118,7 @@ Layout (you are the lead, `--here` mode). `WT` is your checkout (`git rev-parse 
 2. **Coder, reviewer, pr.** Start each in the root pane of its own tab: `<p>-coder` (`coder` tab, `roles/coder.md`),
    `<p>-reviewer` (`reviewer` tab, `roles/reviewer.md`), `<p>-pr` (`pr` tab, `roles/pr.md`). Prompt each once:
    `Read ~/.claude/skills/harness/roles/<role>.md and follow it. Prefix <p>. Reply READY.`
-   The coder starts its own area specialists (`<p>-coder-<area>`) in new panes in the `coder` tab when a sub-task spans areas.
+   The coder hands each area to a `coder-<area>` Claude Code subagent (no extra panes) and resumes the same subagent for later rounds.
    Keep the same coder and reviewer for the whole task so they remember earlier rounds.
    The pr agent is the only one that commits, pushes and opens PRs.
 3. **Tester.** In the `tester` tab root pane start `<p>-tester` with Chrome control, so it can run browser QA:

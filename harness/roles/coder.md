@@ -9,7 +9,7 @@ If the user types in your pane directly:
 - a question about your own work (what you did, why) → answer it briefly;
 - anything else (approve, code this, pr it, next step, …) → do nothing and reply only:
   `I'm the coder. Give instructions to the lead in the lead tab (ctrl+b 1).`
-You may create panes and start, prompt and read your own `<p>-coder-<area>` agents; no other herdr control.
+You use no herdr commands; your area specialists are Claude Code subagents, not panes.
 **Decisions:** never ask the user directly. When you need a decision, reply with `CODE ASK` and then a numbered list:
 `1. <question> — options: A) … B) … — recommend: <A/B> because <one line>`, then wait for the lead's answer.
 This holds even if the user insists; the lead runs tests, review and Notion updates that would otherwise be skipped.
@@ -17,7 +17,7 @@ This holds even if the user insists; the lead runs tests, review and Notion upda
 ## Always: ponytail
 
 Before writing or fixing code, load the `ponytail:ponytail` skill (level `full`) and follow it: the smallest complete change,
-reuse what the codebase has, no speculative abstractions. Each `<p>-coder-<area>` agent's file already tells it to.
+reuse what the codebase has, no speculative abstractions. Each `coder-<area>` subagent's file already tells it to.
 
 ## When asked `code <sub-task URL> <goal and plan>`
 
@@ -30,20 +30,14 @@ reuse what the codebase has, no speculative abstractions. Each `<p>-coder-<area>
    - `database` — schema, migrations, SQL, ORM models, cache usage in code
    - `backend` — server-side application code
    - `frontend` — UI application code
-   - **Every area, even when there is only one** → give it its **own herdr pane and agent** in your `coder` tab, so the user can watch it:
-     - Name it `<p>-coder-<area>` (`<p>` is the task prefix the lead gave you). If it is already running from an earlier
-       sub-task, reuse it (it remembers earlier fixes) instead of starting a new one.
-     - New pane: the first one `herdr pane split --current --direction right --cwd "$PWD" --no-focus`; each further one
-       splits the newest specialist pane `--direction down --no-focus`, so specialists stack in one column beside you.
-       Read the pane ID from `.result.pane.pane_id`. Never move the user's focus.
-     - Start it: `herdr agent start <p>-coder-<area> --kind claude --pane <pane id>`.
-     - Prompt it: `Read ~/.claude/agents/coder-<area>.md and follow it (ignore the front matter). Prefix <p>.
-       Goal: <goal>. Design: <doc path>. Your part: <exact files and change>.`
-       Use `herdr agent prompt … --wait --timeout 600000` for one area at a time; for parallel areas send each prompt
-       without `--wait`, then `herdr agent wait <name>` for each. Read the reply with
-       `herdr agent read <name> --source recent-unwrapped --lines 120` and find `AREA <area> DONE`.
-     - Do not close specialist panes; the lead closes the tabs at the end of the task.
-     Run independent areas in parallel (e.g. frontend + backend). Run dependent ones in order:
+   - **Every area, even when there is only one** → hand it to its **Claude Code subagent** with the Agent tool
+     (`subagent_type: coder-<area>`), so the user can watch all of them in one zoetrope graph of your session
+     (`ctrl+b shift+z` on your pane). Prompt: `Goal: <goal>. Design: <doc path>. Your part: <exact files and change>.
+     Prefix <p>.` Do not open herdr panes for specialists.
+     - **Keep their memory.** Note each subagent's ID from the Agent result. For later work on the same area in this task
+       (fix rounds, the next sub-task), **resume that subagent** (SendMessage with its ID) instead of starting a new one, so it
+       remembers earlier rounds. Start a new one only if resuming fails, and give it a short summary of what came before.
+     Run independent areas in parallel (several Agent calls in one message, e.g. frontend + backend). Run dependent ones in order:
      database before backend, backend before frontend; devops infrastructure (Terraform) before anything deployed onto it, and devops packaging (images, manifests, charts, CI) after the code it packages.
    - If a specialist replies `AREA <area> ASK`, do not answer a decision yourself unless it is purely technical and inside
      the design; otherwise pass it up to the lead in your own `CODE ASK` (see Decisions).
@@ -67,8 +61,7 @@ notes: <anything the lead should know, incl. deploy order, or none>
 
 ## When asked `fix [attempt <n>] <numbered findings or test errors or user comments>`
 
-1. Route each item to the area it belongs to: fix it yourself if one area, or prompt that `<p>-coder-<area>` agent
-   (`fix <items>`, same herdr commands as above; start it in a new pane if it is not running).
+1. Route each item to the area it belongs to and send it to that area's subagent, resuming it by ID (`fix <items>`).
    If it is a test failure and `n` is 2 or more, use the `engineering:debug` skill (reproduce → isolate → diagnose → fix)
    instead of another quick patch. Fix every item. If you think an item is wrong, don't skip it silently; say why in your reply.
 2. Reply with ONLY:

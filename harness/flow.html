@@ -86,7 +86,7 @@ flowchart TB
           <tr><td>1 lead</td><td>The lead you talk to, plus your nvim sidebar (<code>prefix+e</code>)</td><td>Always</td></tr>
           <tr><td>2 architect</td><td>architect</td><td>At the design gate</td></tr>
           <tr><td>3 tracker</td><td>tracker</td><td>To see Notion updates happen</td></tr>
-          <tr><td>4 coder</td><td>coder, plus a pane for each area specialist it starts (e.g. <code>rl-coder-devops</code>)</td><td>To watch the code being written</td></tr>
+          <tr><td>4 coder</td><td>coder; its area specialists run as subagents inside it. Watch them with <code>ctrl+b shift+z</code> on the coder pane</td><td>To watch the code being written</td></tr>
           <tr><td>5 tester</td><td>tester; a second pane for a dev server and its logs when a smoke test needs one</td><td>When tests fail</td></tr>
           <tr><td>6 reviewer</td><td>reviewer</td><td>At the PR gate</td></tr>
           <tr><td>7 pr</td><td>pr</td><td>If a push or PR fails</td></tr>
@@ -216,7 +216,7 @@ next       tester result, then review</pre></div>
           <tr><td>lead</td><td>Coordinates, talks to you</td><td>harness</td><td>Writes code, commits, edits Notion</td></tr>
           <tr><td>architect</td><td>Design doc in <code>docs/design/</code></td><td>system-design, architecture</td><td>Writes code or Notion</td></tr>
           <tr><td>tracker</td><td>Notion tasks, status, PR field</td><td>Notion</td><td>Deletes tasks, writes code</td></tr>
-          <tr><td>coder</td><td>Code, fixes, tests. Hands every area to its own <code>coder-&lt;area&gt;</code> specialist in a pane: backend, frontend, database, devops (devops owns all infra: Terraform for GCP and Cloudflare, CI, containers)</td><td>testing-strategy, debug</td><td>Commits, pushes</td></tr>
+          <tr><td>coder</td><td>Code, fixes, tests. Hands every area to its own <code>coder-&lt;area&gt;</code> subagent, resumed across rounds and visible in zoetrope: backend, frontend, database, devops (devops owns all infra: Terraform for GCP and Cloudflare, CI, containers)</td><td>testing-strategy, debug</td><td>Commits, pushes</td></tr>
           <tr><td>tester</td><td>Runs the CI checks, acceptance and smoke tests; replies TEST PASS or TEST FAIL</td><td>testing-strategy, api-test-suite-builder, playwright-pro, performance-profiler, qa-browser-automation, data-quality-auditor</td><td>Fixes product code, commits</td></tr>
           <tr><td>reviewer</td><td>Replies REVIEW CLEAN or FINDINGS</td><td>code-review + security-review (built in), senior-security, ai-security, cloud-security, red-team, threat-detection, security-audit</td><td>Edits files</td></tr>
           <tr><td>pr</td><td>Branch, commit, push, PR body with Notion links</td><td>deploy-checklist</td><td>Force-pushes, merges</td></tr>
