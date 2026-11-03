@@ -7,8 +7,17 @@ disable-model-invocation: true
 # Harness flow
 
 When the user starts a task with `/harness`, run this flow on top of the Herdr rules below.
-`/harness <task>` runs the task in **its own git worktree and herdr workspace** (default). `/harness --here <task>` skips the
-worktree and works in the current checkout and workspace, as before. Pick the task prefix `<p>` (see Names) first.
+**Two modes.**
+- `/harness <task>` (default) — you are only the **launcher**: create the task's worktree and workspace, start a **brand-new
+  lead** there that knows nothing but this task, hand it the task, and stop. Do not run the flow yourself. This keeps the
+  lead free of this session's history.
+- `/harness --here [--name <slug>] [--prefix <p>] <task>` — you are the **lead**: run the whole flow in the current checkout
+  and workspace. The launcher starts new leads this way.
+
+**Names**, decided once by the launcher (or by you with `--here` when not given):
+- `<slug>`: 2–4 plain words from the task in kebab case, at most 24 characters, e.g. `console-login`, `rate-limiting`.
+  The user reads this one: it names the folder `$REPO-wt/<slug>`, the workspace `$REPO · <slug>` and the branch `feat/<slug>`.
+- `<p>`: a 2–4 letter code for agent names only (e.g. `cl`), because herdr agent names must be short and unique server-wide.
 You are the **lead**: you coordinate and talk to the user. You never edit code yourself; the `coder` agent does.
 Every time you stop for the user (design gate, PR gate, stuck, decisions), end the message with
 **"Reply here in the `lead` tab."** Helpers refuse instructions typed into their own panes.
@@ -28,7 +37,7 @@ agent                tab  state     doing
 <p>-tester            5   working   checks + smoke
 <p>-reviewer          6   idle      —
 <p>-pr                7   idle      PR #31 open
-worktree   ~/projects/keynotes-wt/<p> · branch <p>/<n>-<slug>
+worktree   ~/projects/keynotes-wt/<slug> · branch feat/<slug>
 cicd       PR #31 green · PR #32 watching
 decisions  none | <n> waiting for you (see below)
 next       <what happens next, and whether it needs the user>
@@ -53,22 +62,24 @@ Preflight. **Install skills before starting any agent** (agents only load skills
    If an install fails, tell the user the exact error and ask whether to continue without those skills.
    The reviewer's `code-review` skill is built into Claude Code and cannot be installed; if missing, the reviewer reads the diff itself.
 
-Worktree (skip with `--here`). One worktree per task; every agent of the task works in it; never share one across tasks.
-   1. `MAIN=$(git rev-parse --show-toplevel)`, `REPO=$(basename "$MAIN")`, `WT="$(dirname "$MAIN")/$REPO-wt/<p>"`.
-      If `$WT` already exists from an earlier run of this task, reuse it with `herdr worktree open --path "$WT"` instead.
+Launcher (default mode only; skip with `--here`). One worktree per task; every agent of the task works in it.
+   1. `MAIN=$(git rev-parse --show-toplevel)`, `REPO=$(basename "$MAIN")`, `WT="$(dirname "$MAIN")/$REPO-wt/<slug>"`.
+      If `$WT` already exists from an earlier run of this task, reuse it (`herdr worktree open --path "$WT" --label "$REPO · <slug>"`).
    2. `git -C "$MAIN" fetch origin`, then
-      `herdr worktree create --cwd "$MAIN" --branch <p>/<short-task-slug> --base origin/main --path "$WT" --label "$REPO · <p>" --no-focus`.
+      `herdr worktree create --cwd "$MAIN" --branch feat/<slug> --base origin/main --path "$WT" --label "$REPO · <slug>" --no-focus`.
       Read the new workspace, tab and root pane IDs from the JSON. Ask the user (`--trust-repository`) only if herdr says the
       repository needs trust.
    3. Copy local env files the repo ignores, keeping their paths, and never print, commit or `git add` them:
       `git -C "$MAIN" ls-files --others --ignored --exclude-standard | grep -E '(^|/)\.env[^/]*$'` → copy each into `$WT`.
-   4. Move yourself in: `herdr pane move "$HERDR_PANE_ID" --new-tab --workspace <wt workspace> --label lead --focus`
-      (the user follows you there). Close the worktree workspace's original root tab, so `lead` is tab 1.
-   5. Your shell still starts in `$MAIN`: run **every** repo command in `$WT` (`cd "$WT" && …` or `git -C "$WT"`), and start
-      every agent with `--cwd "$WT"`. Tell the user: "Working in `$WT` (workspace `$REPO · <p>`); your `$MAIN` checkout is untouched."
-   With `--here`, `WT` is the current checkout and the workspace is the current one.
+   4. Start the new lead in the worktree's root pane (its cwd is `$WT`): `herdr tab rename <root tab> lead`, then
+      `herdr agent start <p>-lead --kind claude --pane <root pane>`, then hand over the task, word for word as the user wrote it:
+      `herdr agent prompt <p>-lead "/harness --here --name <slug> --prefix <p> <the user's task>"` (no `--wait`).
+   5. `herdr tab focus <root tab>` so the user lands on the new lead, and reply only:
+      "Started `<slug>` in workspace `$REPO · <slug>` (`$WT`). Talk to its lead there; this session is not part of the task."
+      Then stop. Do not start other agents, and do not take part in the task afterwards.
 
-Layout. In the task's workspace (the worktree's, or the current one with `--here`), your tab is **`lead`** (rename it if needed).
+Layout (you are the lead, `--here` mode). `WT` is your checkout (`git rev-parse --show-toplevel`). Your tab is **`lead`**
+   (rename it if needed) and your name is `<p>-lead` (rename yourself if the launcher did not).
    **One tab per agent.** Create these tabs up front, **one at a time, in exactly this order**, so their numbers are stable
    (`ctrl+b 1`…`7`). Then run `herdr tab list --workspace "$HERDR_WORKSPACE_ID"` and check the labels are in this order before
    starting any agent. If the order is wrong (or the workspace already had tabs), move each tab into place with herdr's
@@ -90,7 +101,7 @@ Layout. In the task's workspace (the worktree's, or the current one with `--here
    If `DESIGN SKIP` happens, leave the `architect` tab empty rather than renumbering.
 
    **Your own name:** `herdr agent rename "$HERDR_PANE_ID" <p>-lead`, so the pr agent can report CI/CD results to you.
-   **Names.** Pick a short task prefix `<p>` (2–4 lowercase letters from the task, e.g. `rl` for rate limiting) and name agents
+   **Agent names.** Use the prefix `<p>` (from `--prefix`, or pick 2–4 letters) and name agents
    `<p>-architect`, `<p>-tracker`, `<p>-coder`, `<p>-reviewer`, `<p>-pr`. Agent names are unique across the whole herdr server,
    so the prefix keeps two harness runs in different repos from clashing. If a name is taken, pick another prefix.
    Below, `architect`, `coder` etc. mean these prefixed names.
@@ -119,7 +130,7 @@ Layout. In the task's workspace (the worktree's, or the current one with `--here
    When the user says it is enabled, restart the tester with `-- --chrome` and re-run the last `test`.
 4. **Loop each sub-task**, in the order the tracker's plan gives:
    0. **Branch.** The first sub-task uses the worktree's branch. For each later one, once the previous PR is approved:
-      `git -C "$WT" fetch origin && git -C "$WT" switch -c <p>/<n>-<sub-task-slug> <base>`, where `<base>` is `origin/main`
+      `git -C "$WT" fetch origin && git -C "$WT" switch -c feat/<slug>-<n>-<sub-task-slug> <base>`, where `<base>` is `origin/main`
       if the previous PR is merged, else the previous sub-task's branch (stacked; tell the pr agent so it says so in the PR).
       Never switch branches with uncommitted changes.
    1. **Code.** Coder: `code <sub-task URL> <goal and plan from the tracker> [design <doc path>]`. Wait for `CODE DONE`
@@ -163,7 +174,7 @@ Layout. In the task's workspace (the worktree's, or the current one with `--here
    - `CICD TIMEOUT` or `SKIPPED` → tell the user in the next status board; do not act on it.
    Status board: add a line `cicd       <PR>: watching | green | FAILED → <who is fixing>` while any watch is open.
 5. When everything is done, tell the user the final tracker status, and ask before closing the tabs you created (`architect` to `pr`).
-   **Worktree cleanup** (not with `--here`): only when every PR of the task is merged and CI/CD is green, and `git -C "$WT" status`
+   **Worktree cleanup** (only when `WT` is a worktree under `$REPO-wt/`, not the user's main checkout): only when every PR of the task is merged and CI/CD is green, and `git -C "$WT" status`
    is clean with nothing unpushed, ask: "Remove worktree `$WT` and workspace `$REPO · <p>`?" On yes:
    `herdr worktree remove --workspace <wt workspace>` (never `--force`). On "keep", leave it. Never delete a worktree with
    uncommitted or unpushed work.

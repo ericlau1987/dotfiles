@@ -23,14 +23,14 @@ flowchart TB
 
 ## Worktrees
 
-`/harness <task>` runs each task in its own git worktree and herdr workspace; `/harness --here <task>` skips that.
+`/harness <task>` is a launcher: it creates the task's worktree and workspace, starts a **brand-new lead** there with only your request, and steps away. `/harness --here <task>` skips the worktree and runs the task in the current session.
 
 ```
 ~/projects/
 ├── keynotes/          your checkout, stays on main, untouched by the harness
 └── keynotes-wt/
-    ├── rl/            task "rl": its own workspace "keynotes · rl" with the 7 tabs
-    └── db/            a second task running at the same time
+    ├── console-login/ workspace "keynotes · console-login", branch feat/console-login, 7 tabs
+    └── rate-limiting/ a second task running at the same time
 ```
 
 - One worktree per task, one branch per PR. Later sub-tasks branch from fresh `origin/main` inside the same worktree
