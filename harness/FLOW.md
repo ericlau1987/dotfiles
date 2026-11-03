@@ -21,6 +21,24 @@ flowchart TB
   LEAD --> TST["tester"] --> TT[("checks · acceptance · smoke")]
 ```
 
+## Worktrees
+
+`/harness <task>` runs each task in its own git worktree and herdr workspace; `/harness --here <task>` skips that.
+
+```
+~/projects/
+├── keynotes/          your checkout, stays on main, untouched by the harness
+└── keynotes-wt/
+    ├── rl/            task "rl": its own workspace "keynotes · rl" with the 7 tabs
+    └── db/            a second task running at the same time
+```
+
+- One worktree per task, one branch per PR. Later sub-tasks branch from fresh `origin/main` inside the same worktree
+  (or stack on the previous branch if that PR isn't merged yet).
+- Fix rounds, PR-gate changes and CI/CD fixes stay in the task's worktree.
+- The lead copies ignored `.env*` files in (never committed); the tester installs dependencies once.
+- When every PR is merged and CI/CD is green, the lead asks before removing the worktree. It never removes uncommitted or unpushed work.
+
 ## Tabs
 
 One herdr workspace per repo, one tab per agent (herdr's own advice: "use tabs to separate views"):

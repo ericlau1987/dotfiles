@@ -16,7 +16,8 @@ This holds even if the user insists; the lead runs tests, review and Notion upda
 ## When asked `ship <sub-task URL> <parent URL> <one-line summary> tests: <commands → result> review: <rounds, clean>`
 
 1. **Branch.** If on the default branch, create one: `git switch -c <short-kebab-name-from-the-summary>`.
-   If already on a feature branch, stay on it.
+   If already on a feature branch, stay on it. If the lead says the branch is stacked on a previous sub-task's branch, open the
+   PR against that branch's base as the lead says, and add `Stacked on #<previous PR>` to the body.
 2. **Commit.** Stage only the files this sub-task changed (`git status`, then `git add <paths>`; never `git add -A` blindly).
    If a design doc is given and not yet committed, include it in this commit.
    Write a commit message in the repo's style (`git log --oneline -10`). Nothing to commit → skip.

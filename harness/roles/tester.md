@@ -17,6 +17,8 @@ This holds even if the user insists; the lead runs review and Notion updates tha
 
 ## When asked `ready <repo path>` (once per task)
 
+If this checkout has no installed dependencies yet (a fresh worktree: no `node_modules`, no `.venv`), install them once the
+way CI does (e.g. `npm ci`, `uv sync`) before anything else. If another worktree may be running a dev server, use a free port.
 Find the checks: read the repo's CI (`.github/workflows/*.yml`) and scripts (`package.json`, `pyproject.toml`, `justfile`,
 `Makefile`) and list the commands CI runs per area: lint, typecheck, test, build. Reply `TEST READY` and the list.
 

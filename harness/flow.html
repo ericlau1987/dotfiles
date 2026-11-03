@@ -71,6 +71,12 @@ flowchart TB
   </section>
 
   <section>
+    <h2>Worktrees</h2>
+    <p><code>/harness &lt;task&gt;</code> runs each task in its own git worktree and herdr workspace, for example <code>~/projects/keynotes-wt/rl</code> shown as workspace <code>keynotes · rl</code>. Your own checkout stays on <code>main</code>, untouched. <code>/harness --here &lt;task&gt;</code> skips the worktree.</p>
+    <p>One worktree per task, one branch per PR. Later sub-tasks branch from fresh <code>origin/main</code> in the same worktree, or stack on the previous branch if that PR isn't merged yet. Fix rounds, PR-gate changes and CI/CD fixes stay in the task's worktree. The lead copies ignored <code>.env*</code> files in, never committed, and the tester installs dependencies once. When every PR is merged and CI/CD is green, the lead asks before removing the worktree, and never removes uncommitted or unpushed work.</p>
+  </section>
+
+  <section>
     <h2>Tabs</h2>
     <p>One herdr workspace per repo and one tab per agent, so each agent's work is easy to find. Your focus stays on <code>lead</code>.</p>
     <div class="tablewrap">
