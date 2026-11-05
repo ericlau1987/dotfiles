@@ -117,3 +117,7 @@ rows = [
   ]
 ]
 # <<< herdr-radar sidebar block
+
+[theme]
+name = "gruvbox"
+auto_switch = false

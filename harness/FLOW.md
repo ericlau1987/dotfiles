@@ -133,6 +133,7 @@ rl-coder              4   working   waiting on specialists
 rl-tester             5   working   checks + smoke
 rl-reviewer           6   idle      —
 rl-pr                 7   idle      PR #31 open
+prs        #31 ✓ #32 open
 decisions  none
 next       tester result, then review
 ```

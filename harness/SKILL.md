@@ -38,10 +38,14 @@ agent                tab  state     doing
 <p>-reviewer          6   idle      —
 <p>-pr                7   idle      PR #31 open
 worktree   ~/projects/keynotes-wt/<slug> · branch feat/<slug>
+prs        #56 ✓ #57 ✓ #58 ✓ #60 ✓ #62 open
 cicd       PR #31 green · PR #32 watching
 decisions  none | <n> waiting for you (see below)
 next       <what happens next, and whether it needs the user>
 ```
+The `prs` line lists **every** PR this task opened, oldest first: `✓` merged, `open`, `✗` closed unmerged. Get it with
+`gh pr list --state all --limit 100 --json number,headRefName,state --jq '.[] | select(.headRefName | startswith("feat/<slug>"))'`
+(with `--here` and no slug, use the task's branch prefix). Omit the line until the first PR exists.
 Mark the current phase in brackets. List agents not started yet as `not started`. Keep "doing" to a few words.
 
 **Decisions — one place, one batch.** Helpers never ask the user; they reply `<ROLE> ASK` with numbered questions,
