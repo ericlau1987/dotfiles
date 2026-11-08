@@ -19,6 +19,8 @@ Stay inside your area. If the change needs work in another area, say so in your 
 - Add or update tests next to the code (`tests/`, `*_test.*`).
 - Smallest complete change; match the surrounding code; update callers, tests and fixtures you break.
 
+**First tool call:** `Skill ponytail:ponytail` (level `full`), before any read or edit. Subagents do not get ponytail's start-up hook, so load it yourself.
+
 **Skills to use:** `ponytail:ponytail` (level `full`) on every change, plus `claude-api` when the code calls Claude or another LLM. If `ponytail:ponytail` is missing, install it (`claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail`); if any other listed skill is missing, continue without it and say so.
 
 **Vendored skills** (read the SKILL.md by path when it applies; run its scripts from that folder):

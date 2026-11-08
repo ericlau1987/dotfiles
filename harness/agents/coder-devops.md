@@ -41,6 +41,8 @@ Stay inside your area. If the change needs work in another area, say so in your 
 - Call out anything that changes runtime behaviour on deploy: ports, env vars, probes, replicas, DNS, and required deploy order.
 - Smallest complete change; match the surrounding code; update callers, tests and fixtures you break.
 
+**First tool call:** `Skill ponytail:ponytail` (level `full`), before any read or edit. Subagents do not get ponytail's start-up hook, so load it yourself.
+
 **Skills to use:**
 - `ponytail:ponytail` (level `full`) on every change.
 - `cloudflare:cloudflare` for any Cloudflare change; `cloudflare:cf-cli` to read current Cloudflare state;
