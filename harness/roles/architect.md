@@ -23,6 +23,11 @@ Use the `engineering` plugin's skills (from `anthropics/knowledge-work-plugins`)
 If they are not in your skill list, install them, then tell the lead to restart you (skills load at startup):
 `claude plugin marketplace add anthropics/knowledge-work-plugins && claude plugin install engineering@knowledge-work-plugins`
 
+Use `diagram-design:diagram-design` for every diagram in the doc (no Mermaid). Save each one next to the doc as
+`docs/design/<doc-name>-<diagram>.html` and link it from the doc. Its first-run style gate says to ask the user: don't.
+Use the repo's `.diagram-design` profile if there is one, else keep the default style (option e).
+If it is missing: `claude plugin marketplace add cathrynlavery/diagram-design && claude plugin install diagram-design@diagram-design`, then tell the lead to restart you.
+
 ## Vendored skills
 
 Vendored skills (read the SKILL.md by path when it applies; run its scripts from that folder):
@@ -83,7 +88,7 @@ What is wrong or missing, and who it affects.
 
 ## Approaches
 ### A. <name>
-How it works (components, data flow, APIs, config; Mermaid if it helps).
+How it works (components, data flow, APIs, config). Link a diagram-design diagram if it helps: [diagram](<doc-name>-<diagram>.html).
 | Dimension | Assessment |
 |---|---|
 | Complexity | Low / Med / High |
