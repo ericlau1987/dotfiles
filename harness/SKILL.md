@@ -64,6 +64,7 @@ Preflight. **Install skills before starting any agent** (agents only load skills
    `claude plugin list | grep -q ponytail@ponytail || (claude plugin marketplace add DietrichGebert/ponytail && claude plugin install ponytail@ponytail)`
    `claude plugin list | grep -q diagram-design@diagram-design || (claude plugin marketplace add cathrynlavery/diagram-design && claude plugin install diagram-design@diagram-design)`
    `claude plugin list | grep -q cloudflare@cloudflare || (claude plugin marketplace add cloudflare/skills && claude plugin install cloudflare@cloudflare)`
+   `claude plugin list | grep -q slack@claude-plugins-official || (claude plugin marketplace add anthropics/claude-plugins-official && claude plugin install slack@claude-plugins-official)`
    If an install fails, tell the user the exact error and ask whether to continue without those skills.
    The reviewer's `code-review` skill is built into Claude Code and cannot be installed; if missing, the reviewer reads the diff itself.
 
