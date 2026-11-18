@@ -10,6 +10,7 @@ tab_bar_right = [
 ]
 # <<< herdr-radar tab-bar block
 
+status_indicators = "symbols"
 [ui.toast]
 delivery = "herdr"
 
@@ -120,5 +121,5 @@ rows = [
 # <<< herdr-radar sidebar block
 
 [theme]
-name = "gruvbox"
+name = "catppuccin"
 auto_switch = false
