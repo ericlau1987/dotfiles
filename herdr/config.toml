@@ -40,9 +40,10 @@ description = "reviewr: review the agent's diff"
 [[keys.command]]
 key = "prefix+shift+v"
 type = "plugin_action"
-command = "chmarax.gitview.toggle"
-description = "gitview: changed files + diff sidebar"
+command = "chmarax.gitview.toggle-tab"
+description = "gitview: changed files + diff in its own tab"
 
+# >>> furkankly.zoetrope keys (managed: `setup-keys` writes this block, `remove-keys` deletes it)
 [[keys.command]]
 key = "prefix+shift+z"
 type = "plugin_action"
