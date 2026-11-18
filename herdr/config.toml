@@ -36,6 +36,13 @@ command = "persiyanov.reviewr.toggle"
 description = "reviewr: review the agent's diff"
 
 # >>> furkankly.zoetrope keys (managed: `setup-keys` writes this block, `remove-keys` deletes it)
+# prefix+g and prefix+v are taken by herdr defaults
+[[keys.command]]
+key = "prefix+shift+v"
+type = "plugin_action"
+command = "chmarax.gitview.toggle"
+description = "gitview: changed files + diff sidebar"
+
 [[keys.command]]
 key = "prefix+shift+z"
 type = "plugin_action"
