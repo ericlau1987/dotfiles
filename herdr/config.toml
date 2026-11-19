@@ -40,8 +40,8 @@ description = "gitview: changed files + diff in its own tab"
 [[keys.command]]
 key = "prefix+shift+b"
 type = "plugin_action"
-command = "board.toggle"
-description = "board: GitHub issues → agents"
+command = "herdr-board.open-board"
+description = "herdr-board: kanban of agent cards (overlay)"
 
 # >>> furkankly.zoetrope keys (managed: `setup-keys` writes this block, `remove-keys` deletes it)
 [[keys.command]]
